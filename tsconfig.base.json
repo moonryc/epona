@@ -12,9 +12,14 @@
     "module": "esnext",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
+    "strict": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@epona/epona-client": ["libs/epona-client/src/index.ts"],
+      "@epona/ollama": ["libs/ollama/src/index.ts"],
+      "@epona/tools": ["libs/tools/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
