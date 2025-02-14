@@ -1,0 +1,19 @@
+{
+  "name": "epona-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/epona-client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/epona-client",
+        "main": "libs/epona-client/src/index.ts",
+        "tsConfig": "libs/epona-client/tsconfig.lib.json",
+        "assets": ["libs/epona-client/*.md"]
+      }
+    }
+  }
+}
