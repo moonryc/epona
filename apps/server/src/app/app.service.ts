@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-// import { EponaClient } from '@epona/epona-client';
+import { EponaClient } from '@epona/epona-client';
 import { SuccessResponse } from './Responses';
 
 @Injectable()

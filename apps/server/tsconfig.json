@@ -11,8 +11,27 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true,
+//    "esModuleInterop": true,
+//    "module": "NodeNext",
+//    "moduleResolution": "nodenext"
+    "target": "ES2022",
     "module": "NodeNext",
-    "moduleResolution": "nodenext"
+    "rootDir": "src",
+    "sourceRoot": "src",
+    "baseUrl": ".",
+    "moduleResolution": "NodeNext",
+    "incremental": false,
+    "moduleDetection": "auto",
+    "types": ["node"],
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useUnknownInCatchVariables": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true
   }
 }
