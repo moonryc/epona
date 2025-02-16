@@ -23,7 +23,8 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "server:build",
-        "runBuildTargetDependencies": false
+        "runBuildTargetDependencies": false,
+        "runtimeArgs": ["--experimental-specifier-resolution=node"]
       },
       "configurations": {
         "development": {
