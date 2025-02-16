@@ -6,7 +6,7 @@ import { SuccessResponse } from './Responses';
 export class AppService {
 
   healthCheck(){
-    // const epona = new EponaClient();
+    const epona = new EponaClient();
     // new EponaClient()
     // const a = await epona.converse({ message: "what is 3 plus 5" });
     // console.log(a)
