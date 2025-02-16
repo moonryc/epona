@@ -18,7 +18,10 @@ type Chat = {
 const EponaChat = () => {
   const {dummyToast} = useAllToasts()
 
-  const [chatHistory, setChatHistory] = useState<Chat[]>([]);
+  const [chatHistory, setChatHistory] = useState<Chat[]>([
+    { user: Participant.EPONA, message:"DUMMY MESSAGE", date: new Date() },
+    { user: Participant.USER, message:"DUMMY MESSAGE", date: new Date() }
+  ]);
   const [userInput, setUserInput] = useState<string>("");
   // TODO: add attachments
   // const [attachment, setAttachment] = useState<unknown>();
@@ -35,15 +38,17 @@ const EponaChat = () => {
 
   return (
     <Paper title={"Epona Chat"}>
-      <Box height="10rem" width="100%" sx={{overflowY: 'auto'}}>
+      <Box height="20rem" width="100%" sx={{overflowY: 'auto'}}>
         {chatHistory.map(chat=>{
           const isUser = chat.user === Participant.USER
-          const userIcon =  isUser && <Person/>
-          const eponaIcon =  !isUser && <Person/>
+          const userIcon =  isUser && <Person/>;
+          const eponaIcon =  !isUser && "🌕"
+          const chatBorderRadius = `25px 25px ${isUser ? "0px 25px" : "25px 0px"}`
+          const bubbleColor = isUser ? "primary.main" : "secondary.main"
           return (
-            <Box key={chat.date.getMilliseconds()} display={"flex"} justifyContent={isUser ? "right" : "left"} gap={2}>
+            <Box key={chat.date.getMilliseconds()} display={"flex"} justifyContent={isUser ? "right" : "left"} gap={1} m={1} alignItems={"end"}>
               {eponaIcon}
-              <Typography>{chat.message}</Typography>
+              <Typography bgcolor={bubbleColor} py={1} px={3} mb={2} borderRadius={chatBorderRadius}>{chat.message}</Typography>
               {userIcon}
             </Box>
           )

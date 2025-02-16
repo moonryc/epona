@@ -2,20 +2,25 @@ import { Button, Stack } from '@mui/material';
 import Paper from '../Paper';
 import { useToastMutation } from '../../hooks/useToastMutation';
 import { useMemo } from 'react';
+import healthCheck from '../../api/mutation/healthCheck';
 
 const EponaTest = () => {
-  const healthCheckMutation= useToastMutation()
-  const saveMemoryMutation= useToastMutation()
-  const loadMemoryMutation = useToastMutation()
+  const healthCheckMutation= useToastMutation({
+    options:{
+      mutationFn: healthCheck
+    }
+  })
+  // const saveMemoryMutation= useToastMutation()
+  // const loadMemoryMutation = useToastMutation()
 
   const buttons = useMemo<{name:string, action:()=>void}[]>(()=>{
     return [
       { name: "HEALTH CHECK", action: healthCheckMutation.mutate },
-      { name: "SAVE MEMORY", action: saveMemoryMutation.mutate },
-      { name: "LOAD MEMORY", action: loadMemoryMutation.mutate },
+      // { name: "SAVE MEMORY", action: saveMemoryMutation.mutate },
+      // { name: "LOAD MEMORY", action: loadMemoryMutation.mutate },
 
     ]
-  },[healthCheckMutation.mutate, loadMemoryMutation.mutate, saveMemoryMutation.mutate])
+  },[healthCheckMutation.mutate])
 
   return (
     <Paper title={"Epona Tests"}>
