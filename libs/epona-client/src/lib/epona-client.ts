@@ -1,7 +1,8 @@
 import { OllamaClient, OllammaModels } from '@epona/ollama';
 import { EponaChatParams } from './types';
-import eponaTools, { ToolOrganizer } from './eponaTools';
+import eponaTools from './eponaTools';
 import { ChatResponse, Message, ToolCall } from 'ollama';
+import { ToolOrganizer } from '@epona/tools';
 
 export default class EponaClient {
   private readonly ollamaClient = OllamaClient;
