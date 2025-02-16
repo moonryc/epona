@@ -17,6 +17,10 @@ Please install the following
 ollama run llama3.2
 ```
 
+```bash
+
+nx server server
+```
 
 
 # Description
