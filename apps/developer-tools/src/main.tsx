@@ -16,11 +16,11 @@ root.render(
   <StrictMode>
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-    <SnackbarProvider>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </SnackbarProvider>
+      <SnackbarProvider>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   </StrictMode>
 );
