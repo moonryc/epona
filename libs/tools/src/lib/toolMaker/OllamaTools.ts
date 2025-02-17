@@ -1,7 +1,7 @@
-import ToolMaker from './toolMaker';
+import ToolMaker from './ToolMaker';
 import { ToolMakerParams } from './types';
 
-export default class ToolOrganizer {
+export default class OllamaTools {
   private readonly toolMakerTools: ToolMaker[];
   constructor(tools:ToolMaker[]){
     this.toolMakerTools = tools;

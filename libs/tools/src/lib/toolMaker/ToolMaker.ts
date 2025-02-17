@@ -1,8 +1,6 @@
 import { Tool } from 'ollama';
 import { ToolMakerParams } from './types';
 
-
-
 export default class ToolMaker {
 
   private readonly toolDefinition: ToolMakerParams["toolDefinition"];

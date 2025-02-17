@@ -1,6 +1,6 @@
 import {Message} from 'ollama';
 
-export type EponaChatParams = {
+export type OllamaChatParams = {
   message: string;
   images?: Message["images"];
 }

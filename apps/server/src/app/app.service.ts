@@ -5,11 +5,12 @@ import { SuccessResponse } from './Responses';
 @Injectable()
 export class AppService {
 
-  healthCheck(){
+  async healthCheck(){
     const epona = new EponaClient();
+    const a = await epona.foo()
     // new EponaClient()
     // const a = await epona.converse({ message: "what is 3 plus 5" });
-    // console.log(a)
+    console.log(a)
 
     return new SuccessResponse({success:true, message: "Healthy"})
   }

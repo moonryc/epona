@@ -1,2 +1,2 @@
-export {default as ToolMaker} from "./toolMaker"
-export {default as ToolOrganizer} from "./toolOrganizer"
+export {default as ToolMaker} from "./ToolMaker"
+export {default as OllamaTools} from "./OllamaTools"
