@@ -20,6 +20,8 @@ export class AppController {
     return this.appService.loadMemory();
   }
 
+  
+
   // @Get()
   // getData() {
   //   return this.appService.getData();

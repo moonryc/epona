@@ -1,25 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { EponaClient } from '@epona/epona-client';
+import { Inject, Injectable } from '@nestjs/common';
 import { SuccessResponse } from './Responses';
+import { EponaSingleton } from './epona/epona.singleton';
 
 @Injectable()
 export class AppService {
-
-  async healthCheck(){
-    const epona = new EponaClient();
-    const a = await epona.foo()
-    // new EponaClient()
-    // const a = await epona.converse({ message: "what is 3 plus 5" });
-    console.log(a)
-
-    return new SuccessResponse({success:true, message: "Healthy"})
+  constructor(
+    @Inject('EPONA_SINGLETON') private readonly eponaSingleton: EponaSingleton
+  ) {}
+  async healthCheck() {
+    return new SuccessResponse({ success: true, message: 'Healthy' });
   }
 
-  saveMemory(){
-    return new SuccessResponse({success:true})
+  async chat(){
+
   }
 
-  loadMemory(){
-    return new SuccessResponse({success:true})
+  saveMemory() {
+    return new SuccessResponse({ success: true });
+  }
+
+  loadMemory() {
+    return new SuccessResponse({ success: true });
   }
 }
