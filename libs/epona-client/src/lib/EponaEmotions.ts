@@ -1,5 +1,4 @@
 import { UnconstrainedMemory } from '@epona/ollama';
-import { BaseMemoryMessage } from 'libs/ollama/src/lib/messages';
 
 export default class EponaEmotions {
   private memory: UnconstrainedMemory;
