@@ -1,15 +1,17 @@
 import { BaseMemoryMessage } from '../messages';
 
 export default class BaseMemory {
-  get messages(): readonly BaseMemoryMessage[] {
+  protected messagesHistory: BaseMemoryMessage[] = [];
+
+  public get messages(): readonly BaseMemoryMessage[] {
     throw new Error("Method not implemented.");
   }
 
-  add(message: BaseMemoryMessage, index?: number): Promise<void> {
+  public add(message: BaseMemoryMessage, index?: number) {
     throw new Error("Method not implemented.");
   }
 
-  delete(message: BaseMemoryMessage): Promise<boolean> {
+  delete(message: BaseMemoryMessage) {
     throw new Error("Method not implemented.");
   }
 

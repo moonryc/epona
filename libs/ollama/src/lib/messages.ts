@@ -1,3 +1,5 @@
+import { Message } from 'ollama';
+
 enum MessageSource {
   SYSTEM = 'System',
   USER = 'User',
@@ -6,22 +8,24 @@ enum MessageSource {
 
 
 export class BaseMemoryMessage {
-  public readonly source: MessageSource = MessageSource.SYSTEM
-  public readonly message: string
+  public readonly timestamp: number = new Date().getMilliseconds();
+  public readonly role: MessageSource = MessageSource.SYSTEM
+  public readonly content: Message["content"]
+  public readonly images?: Message["images"]
 
   constructor(message: string) {
-    this.message = message
+    this.content = message
   }
 }
 
 export class SystemMessage extends BaseMemoryMessage {
-  override source = MessageSource.SYSTEM;
+  override role = MessageSource.SYSTEM;
 }
 
 export class UserMessage extends BaseMemoryMessage {
-  override source = MessageSource.USER;
+  override role = MessageSource.USER;
 }
 
 export class AssistantMessage extends BaseMemoryMessage {
-  override source = MessageSource.ASSISTANT;
+  override role = MessageSource.ASSISTANT;
 }

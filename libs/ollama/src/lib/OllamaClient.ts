@@ -5,6 +5,7 @@ import { OllamaModels } from './models';
 import { OllamaTools, ToolMaker } from '@epona/tools';
 import { OllamaChatParams } from './types';
 import { Options as ChatModelOptions } from 'ollama';
+import { UserMessage } from './messages';
 
 export type OllamaClientProps = {
   host: string
@@ -52,6 +53,17 @@ export default class OllamaClient {
     });
   }
 
+  protected async streamChat(messages: Message[]) {
+    return this.client.chat({
+      model: this.model,
+      tools: this.ollamaTools.definitions,
+      stream: true,
+      keep_alive: this.parsedKeepAlive,
+      messages,
+      options: this.chatModelOptions,
+    });
+  }
+
   async runTools({response,toolCalls}:{response:ChatResponse,toolCalls:ToolCall[]}) {
     const messages: Message[] = [];
 
@@ -78,7 +90,22 @@ export default class OllamaClient {
   }
 
   async converse(input: OllamaChatParams) {
-    const response = await this.chat([
+    const userMessage = new UserMessage(input.message)
+    const messages: Message[] = [...this.memory.messages, userMessage]
+    const response = await this.chat(messages);
+
+    // if (response.message.tool_calls) {
+    //   const toolMessages =  await this.runTools({ response, toolCalls: response.message.tool_calls });
+    //   return this.chat(toolMessages);
+    // }
+    // AI MEMORY
+    // this.memory.add(messages);
+    this.memory.add(userMessage);
+    return response;
+  }
+
+  async streamConverse(input: OllamaChatParams) {
+    return this.streamChat([
         {
           role: 'user',
           content: input?.message,
@@ -86,12 +113,6 @@ export default class OllamaClient {
         },
       ],
     );
-
-    if (response.message.tool_calls) {
-      const toolMessages =  await this.runTools({ response, toolCalls: response.message.tool_calls });
-      return this.chat(toolMessages);
-    }
-    return response;
   }
 
 }
