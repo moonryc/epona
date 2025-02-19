@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { ChatDto } from './epona.input';
 import { EponaService } from './epona.service';
+import { Response } from 'express';
 
 @Controller('/epona')
 export class EponaController {
@@ -9,5 +10,20 @@ export class EponaController {
   @Post("/chat")
   chat(@Body() body: ChatDto) {
     return this.eponaService.chat(body);
+  }
+
+  @Post("/streamChat")
+  steamChat(@Body() body: ChatDto, @Res()res: Response){
+    return this.eponaService.steamChat(body,res)
+  }
+
+  @Get('/saveMemory')
+  saveMemory() {
+    return this.eponaService.saveMemory();
+  }
+
+  @Get('/loadMemory')
+  loadMemory() {
+    return this.eponaService.loadMemory();
   }
 }

@@ -11,6 +11,14 @@ export default class EponaClient extends OllamaClient {
     this.brain = eponaBrain;
   }
 
+  public async saveMemory(){
+    await this.brain.memory.createSnapshot()
+  }
+
+  public async loadMemory(){
+    // await this.brain.memory.loadSnapshot()
+  }
+
   get currentEmotion() {
     return this.brain.emotions.currentEmotion;
   }

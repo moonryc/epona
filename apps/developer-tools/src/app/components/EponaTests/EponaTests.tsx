@@ -3,6 +3,7 @@ import Paper from '../Paper';
 import { useToastMutation } from '../../hooks/useToastMutation';
 import { useMemo } from 'react';
 import healthCheck from '../../api/mutation/healthCheck';
+import EponaChat from '../EponaChat/EponaChat';
 
 const EponaTest = () => {
   const healthCheckMutation= useToastMutation({
@@ -16,6 +17,7 @@ const EponaTest = () => {
   const buttons = useMemo<{name:string, action:()=>void}[]>(()=>{
     return [
       { name: "HEALTH CHECK", action: healthCheckMutation.mutate },
+      // { name: "EPONA CHAT", action: saveMemoryMutation.mutate },
       // { name: "SAVE MEMORY", action: saveMemoryMutation.mutate },
       // { name: "LOAD MEMORY", action: loadMemoryMutation.mutate },
 
@@ -25,6 +27,7 @@ const EponaTest = () => {
   return (
     <Paper title={"Epona Tests"}>
       <Stack spacing={2} m={2}>
+        <EponaChat/>
         {buttons.map((button) => (<Button key={button.name} variant={"contained"} onClick={()=>button.action()}>{button.name}</Button>))}
       </Stack>
     </Paper>

@@ -1,6 +1,6 @@
 export * from "./models"
-export {default as OllamaConnection} from "./ollamaConnection"
 export * from "./ollamaConnection"
 export {default as OllamaClient} from "./OllamaClient"
 export * from "./OllamaClient"
 export * from "./memory"
+export * from "./messages"

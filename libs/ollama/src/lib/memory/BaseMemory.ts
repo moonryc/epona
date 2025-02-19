@@ -1,9 +1,18 @@
-import { BaseMemoryMessage } from '../messages';
+import { BaseMemoryMessage, SystemMessage } from '../messages';
 
 export default class BaseMemory {
   protected messagesHistory: BaseMemoryMessage[] = [];
+  protected prompt: SystemMessage;
+
+  constructor(prompt: SystemMessage) {
+    this.prompt = prompt;
+  }
 
   public get messages(): readonly BaseMemoryMessage[] {
+    throw new Error("Method not implemented.");
+  }
+
+  get messagesWithPrompt(): readonly BaseMemoryMessage[] {
     throw new Error("Method not implemented.");
   }
 
@@ -19,11 +28,11 @@ export default class BaseMemory {
     throw new Error("Method not implemented.");
   }
 
-  createSnapshot(): unknown {
+  async createSnapshot(): Promise<BaseMemoryMessage[]> {
     throw new Error("Method not implemented.");
   }
 
-  loadSnapshot(state: ReturnType<typeof this.createSnapshot>): void {
+  async loadSnapshot(state: BaseMemoryMessage[]): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }

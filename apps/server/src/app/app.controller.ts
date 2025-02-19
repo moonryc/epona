@@ -9,22 +9,4 @@ export class AppController {
   healthCheck() {
     return this.appService.healthCheck();
   }
-
-  @Get('/saveMemory')
-  saveMemory() {
-    return this.appService.saveMemory();
-  }
-
-  @Get('/loadMemory')
-  loadMemory() {
-    return this.appService.loadMemory();
-  }
-
-  
-
-  // @Get()
-  // getData() {
-  //   return this.appService.getData();
-  // }
 }
-

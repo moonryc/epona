@@ -3,6 +3,7 @@ import { ChatDto } from './epona.input';
 import { EponaSingleton } from './epona.singleton';
 import { SuccessResponse } from '../Responses';
 import { EponaClient } from '@epona/epona-client';
+import {Response} from 'express';
 
 @Injectable()
 export class EponaService {
@@ -13,8 +14,22 @@ export class EponaService {
   ) {
     this.epona = eponaSingleton.getInstance();
   }
+
   async healthCheck() {
     return new SuccessResponse({ success: true, message: 'Healthy' });
+  }
+
+  async steamChat(input: ChatDto, res: Response) {
+    if (!input.message) {
+      input.message = "whats the weather?";
+    }
+    const stream = await this.epona.streamchat(input.message);
+    for await (const ch of stream) {
+      console.log("Sending chunk:", ch.message.content);
+      res.write(`${ch.message.content}\n`);
+    }
+
+    return res.end();
   }
 
   async chat(input:ChatDto){
@@ -39,10 +54,10 @@ export class EponaService {
   }
 
   saveMemory() {
-    return new SuccessResponse({ success: true });
+    this.epona.
   }
 
   loadMemory() {
-    return new SuccessResponse({ success: true });
+    throw new Error('load Memory');
   }
 }

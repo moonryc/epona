@@ -1,11 +1,12 @@
 import BaseMemory from './memory/BaseMemory';
 import OllamaConnection from './ollamaConnection';
-import { ChatResponse, Message, Ollama, ToolCall } from 'ollama';
+import { AbortableAsyncIterator, ChatResponse, Message, Ollama, ToolCall } from 'ollama';
 import { OllamaModels } from './models';
 import { OllamaTools, ToolMaker } from '@epona/tools';
 import { OllamaChatParams } from './types';
 import { Options as ChatModelOptions } from 'ollama';
-import { UserMessage } from './messages';
+import { AssistantMessage, UserMessage } from './messages';
+import { PassThrough } from 'stream';
 
 export type OllamaClientProps = {
   host: string
@@ -91,28 +92,37 @@ export default class OllamaClient {
 
   async converse(input: OllamaChatParams) {
     const userMessage = new UserMessage(input.message)
-    const messages: Message[] = [...this.memory.messages, userMessage]
+    const messages: Message[] = [...this.memory.messagesWithPrompt, userMessage]
     const response = await this.chat(messages);
 
     // if (response.message.tool_calls) {
     //   const toolMessages =  await this.runTools({ response, toolCalls: response.message.tool_calls });
     //   return this.chat(toolMessages);
     // }
-    // AI MEMORY
-    // this.memory.add(messages);
+
     this.memory.add(userMessage);
+    this.memory.add(new AssistantMessage(response.message.content));
     return response;
   }
 
+  async saveStreamToMemory(stream: AbortableAsyncIterator<ChatResponse>) {
+    let response = ''
+    for await (const ch of stream) {
+      response += ch.message.content;
+    }
+    const newAIMessage = new AssistantMessage(response)
+    this.memory.add(newAIMessage);
+  }
+
   async streamConverse(input: OllamaChatParams) {
-    return this.streamChat([
-        {
-          role: 'user',
-          content: input?.message,
-          images: input?.images,
-        },
-      ],
-    );
+    const userMessage = new UserMessage(input.message)
+    const messages: Message[] = [...this.memory.messagesWithPrompt, userMessage]
+    this.memory.add(userMessage);
+    const stream = await this.streamChat(messages)
+    //@ts-ignore
+    void this.saveStreamToMemory(stream);
+    //@ts-ignore
+    return stream as typeof stream;
   }
 
 }

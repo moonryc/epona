@@ -1,90 +1,113 @@
 import Paper from '../Paper';
-import { Box, BoxProps, IconButton, TextField, Typography } from '@mui/material';
-import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
-import { AttachFile, Person, Send } from '@mui/icons-material';
-import { useAllToasts } from '../../hooks/useAllToasts';
-import { server } from '../../api/apiAdresses';
-import { useMutation } from '@tanstack/react-query';
-import { eponaChat } from '../../api/mutation/epona.mutations';
-
-
-enum Participant {
-  EPONA,
-  USER,
-}
-
-type Chat = {
-  user: Participant;
-  message: string;
-  date: Date
-}
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  TextField,
+} from '@mui/material';
+import { useCallback, useMemo, useState } from 'react';
+import { AttachFile, Send } from '@mui/icons-material';
+import ChatMessage, { ChatMessageProps, Participant } from './ChatMessage';
+import { useToggle } from 'react-use';
+import { useEponaChatStream } from './useEponaChatStream';
+import { compact } from 'lodash';
 
 const EponaChat = () => {
   // TODO: add attachments
   // const [attachment, setAttachment] = useState<unknown>();
-  const [userInput, setUserInput] = useState<string>("");
-  const [chatHistory, setChatHistory] = useState<Chat[]>([
-    { user: Participant.EPONA, message:"DUMMY MESSAGE", date: new Date() },
-  ]);
-  // const [lastAIMessage, setLastAIMessage] = useState<Chat | undefined>();
-  // const mess = [
-  //   ...chatHistory,
-  //   lastAIMessage ? { user: Participant.EPONA, message:lastAIMessage, date: new Date() } : undefined
-  // ]
+  const [isEponaChatOpen, toggleEponaChat] = useToggle(false);
+  const [userInput, setUserInput] = useState<string>('');
+  const [chatHistory, setChatHistory] = useState<ChatMessageProps['chat'][]>(
+    []
+  );
+  const { response, sendMessage, loading } = useEponaChatStream(userInput);
+  const lastAIMessage = useMemo<ChatMessageProps['chat']>(
+    () => ({
+      user: Participant.EPONA,
+      message: response ?? '',
+      date: new Date(),
+    }),
+    [response]
+  );
 
-  const eponaChatMutation = useMutation({
-    mutationFn: eponaChat,
-    onSuccess:async a=>{
-      const parsed = await a.json()
-      console.log(parsed)
-      const newMessage:Chat = {
-        user: Participant.EPONA, message: parsed.message.content, date: new Date()
-      }
-      setChatHistory(prev=> [...prev, newMessage]);
-    }
-  })
+  const mess = [...chatHistory, lastAIMessage ? lastAIMessage : undefined];
 
-  const handleUserInputOnChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value),[])
+  const handleUserInputOnChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value),
+    []
+  );
 
-  const handleSubmit = useCallback((e:React.FormEvent<HTMLFormElement> )=>{
-    e.preventDefault()
-    const newHistory: Chat[] = [...chatHistory, { user: Participant.USER, message: userInput, date: new Date() }]
-    eponaChatMutation.mutate({message: userInput})
-    setUserInput("");
-    setChatHistory(newHistory);
-  },[chatHistory, eponaChatMutation, userInput])
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const newHistory: ChatMessageProps['chat'][] = compact([
+        ...chatHistory,
+        lastAIMessage ? lastAIMessage : undefined,
+        { user: Participant.USER, message: userInput, date: new Date() },
+      ]);
+      sendMessage();
+      setUserInput('');
+      setChatHistory(newHistory);
+    },
+    [chatHistory, sendMessage, userInput]
+  );
 
   return (
-    <Paper title={"Epona Chat"}>
-      <Box height="20rem" width="100%" sx={{overflowY: 'auto'}}>
-        {chatHistory.map(chat=>{
-          if(!chat){
-            return null
-          }
-          const isUser = chat.user === Participant.USER
-          const userIcon =  isUser && <Person/>;
-          const eponaIcon =  !isUser && "🌕"
-          const chatBorderRadius = `25px 25px ${isUser ? "0px 25px" : "25px 0px"}`
-          const bubbleColor = isUser ? "primary.main" : "secondary.main"
-          return (
-            <Box key={chat.date.getMilliseconds()} display={"flex"} justifyContent={isUser ? "right" : "left"} gap={1} m={1} alignItems={"end"}>
-              {eponaIcon}
-              <Typography bgcolor={bubbleColor} py={1} px={3} mb={2} borderRadius={chatBorderRadius}>{chat.message}</Typography>
-              {userIcon}
-            </Box>
-          )
-        })}
-      </Box>
-      <Box m={2} gap={2} component={"form"} display="flex" onSubmit={handleSubmit} alignContent={"center"}>
-        <TextField fullWidth value={userInput} onChange={handleUserInputOnChange} />
-        <IconButton color={"primary"} disabled>
-          <AttachFile/>
-        </IconButton>
-        <IconButton color={"primary"} type="submit">
-          <Send/>
-        </IconButton>
-      </Box>
-    </Paper>
+    <>
+      <Button onClick={toggleEponaChat}>EPONA CHAT</Button>
+      <Drawer
+        title={'Epona Chat'}
+        open={isEponaChatOpen}
+        anchor={'right'}
+        onClose={toggleEponaChat}
+      >
+        <Paper
+          title={'Epona Chat'}
+          sx={{
+            display: 'flex',
+            height: '100vh',
+            flexDirection: 'column',
+            width: '75vw',
+          }}
+        >
+          <Box width="100%" sx={{ overflowY: 'auto' }} flexGrow={1}>
+            {mess.map((chat) => {
+              if (!chat) {
+                return null;
+              }
+              return (
+                <ChatMessage key={chat.date.getMilliseconds()} chat={chat} />
+              );
+            })}
+          </Box>
+          <Box flexGrow={1} />
+          <Divider sx={{ m: 2 }} />
+          <Box
+            m={2}
+            gap={2}
+            component={'form'}
+            display="flex"
+            onSubmit={handleSubmit}
+            alignContent={'center'}
+          >
+            <TextField
+              fullWidth
+              value={userInput}
+              onChange={handleUserInputOnChange}
+            />
+            <IconButton color={'secondary'} disabled>
+              <AttachFile />
+            </IconButton>
+            <IconButton color={'secondary'} type="submit">
+              <Send />
+            </IconButton>
+          </Box>
+        </Paper>
+      </Drawer>
+    </>
   );
 };
 

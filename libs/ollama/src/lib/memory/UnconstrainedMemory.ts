@@ -1,11 +1,18 @@
 import BaseMemory from './BaseMemory';
-import { BaseMemoryMessage } from '../messages';
+import { BaseMemoryMessage, SystemMessage } from '../messages';
 
 export default class UnconstrainedMemory extends BaseMemory {
-  override messagesHistory: BaseMemoryMessage[] = [];
+
+  constructor(prompt: SystemMessage) {
+    super(prompt);
+  }
 
   override get messages(): readonly BaseMemoryMessage[] {
     return this.messagesHistory;
+  }
+
+  override get messagesWithPrompt(): readonly BaseMemoryMessage[] {
+    return [this.prompt, ...this.messagesHistory];
   }
 
   public override add(message: BaseMemoryMessage, index?: number) {
@@ -18,23 +25,22 @@ export default class UnconstrainedMemory extends BaseMemory {
 
   public override delete(message: BaseMemoryMessage) {
     const indexToRemove = this.messagesHistory.indexOf(message);
-    if(indexToRemove !== -1) {
-      return false
+    if (indexToRemove !== -1) {
+      return false;
     }
     this.messagesHistory = this.messagesHistory.splice(indexToRemove, 1);
     return true;
-
   }
 
   public override reset() {
     this.messagesHistory = [];
   }
 
-  public override createSnapshot() {
-    return this.messagesHistory
+  public override async createSnapshot() {
+    return this.messagesHistory;
   }
 
-  public override loadSnapshot(state:ReturnType<typeof this.createSnapshot>) {
+  public override async loadSnapshot(state: BaseMemoryMessage[]) {
     this.messagesHistory = state;
   }
 }
