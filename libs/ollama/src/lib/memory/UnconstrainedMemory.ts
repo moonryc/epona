@@ -8,39 +8,39 @@ export default class UnconstrainedMemory extends BaseMemory {
   }
 
   override get messages(): readonly BaseMemoryMessage[] {
-    return this.messagesHistory;
+    return this._messages;
   }
 
   override get messagesWithPrompt(): readonly BaseMemoryMessage[] {
-    return [this.prompt, ...this.messagesHistory];
+    return [this._prompt, ...this._messages];
   }
 
   public override add(message: BaseMemoryMessage, index?: number) {
     if (!index) {
-      this.messagesHistory.push(message);
+      this._messages.push(message);
       return;
     }
-    this.messagesHistory = this.messagesHistory.splice(index, 0, message);
+    this._messages = this._messages.splice(index, 0, message);
   }
 
   public override delete(message: BaseMemoryMessage) {
-    const indexToRemove = this.messagesHistory.indexOf(message);
+    const indexToRemove = this._messages.indexOf(message);
     if (indexToRemove !== -1) {
       return false;
     }
-    this.messagesHistory = this.messagesHistory.splice(indexToRemove, 1);
+    this._messages = this._messages.splice(indexToRemove, 1);
     return true;
   }
 
   public override reset() {
-    this.messagesHistory = [];
+    this._messages = [];
   }
 
   public override async createSnapshot() {
-    return this.messagesHistory;
+    return this._messages;
   }
 
   public override async loadSnapshot(state: BaseMemoryMessage[]) {
-    this.messagesHistory = state;
+    this._messages = state;
   }
 }

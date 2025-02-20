@@ -1,3 +1,3 @@
-import { server } from '../apiAdresses';
+import { serverAddress } from '../apiAdresses';
 
-export default ()=>fetch(`${server}/healthCheck`, { method: 'POST' });
+export default ()=>fetch(`${serverAddress}/healthCheck`, { method: 'POST' });

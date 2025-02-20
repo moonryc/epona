@@ -7,14 +7,9 @@ import { Response } from 'express';
 export class EponaController {
   constructor(private readonly eponaService: EponaService) {}
 
-  @Post("/chat")
-  chat(@Body() body: ChatDto) {
-    return this.eponaService.chat(body);
-  }
-
   @Post("/streamChat")
   steamChat(@Body() body: ChatDto, @Res()res: Response){
-    return this.eponaService.steamChat(body,res)
+    return this.eponaService.chat(body,res)
   }
 
   @Get('/saveMemory')

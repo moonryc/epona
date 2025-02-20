@@ -19,11 +19,11 @@ export class EponaService {
     return new SuccessResponse({ success: true, message: 'Healthy' });
   }
 
-  async steamChat(input: ChatDto, res: Response) {
+  async chat(input: ChatDto, res: Response) {
     if (!input.message) {
       input.message = "whats the weather?";
     }
-    const stream = await this.epona.streamchat(input.message);
+    const stream = await this.epona.chatStream(input.message);
     for await (const ch of stream) {
       console.log("Sending chunk:", ch.message.content);
       res.write(`${ch.message.content}\n`);
@@ -32,32 +32,23 @@ export class EponaService {
     return res.end();
   }
 
-  async chat(input:ChatDto){
-    if (!input.message){
-      return
+  async saveMemory() {
+    try{
+      await this.epona.saveMemory()
+      return new SuccessResponse({ success: true, message: 'Saved memory' });
+    }catch(e){
+      console.error(e);
+      return new SuccessResponse({ success: false, message: 'Failed to save memory' });
     }
-    const stream = await this.epona.chatConverse(input.message)
-    return stream
-    // return new Response(
-    //   new ReadableStream({
-    //     start: async (controller)=>{
-    //       for await (const chunk of stream){
-    //         console.log(chunk);
-    //         const textEncoder = new TextEncoder();
-    //         controller.enqueue(textEncoder.encode(chunk.message.content));
-    //       }
-    //       controller.close()
-    //     }
-    //   }),
-    //   { headers: { "Content-Type": "text/plain" } } // Ensure proper response type
-    // )
   }
 
-  saveMemory() {
-    this.epona.
-  }
-
-  loadMemory() {
-    throw new Error('load Memory');
+  async loadMemory() {
+    try{
+      await this.epona.loadMemory()
+      return new SuccessResponse({ success: true, message: 'Successfully loaded memory' });
+    }catch(e){
+      console.error(e);
+      return new SuccessResponse({ success: false, message: 'Failed to load memory' });
+    }
   }
 }

@@ -1,4 +1,4 @@
-import Paper from '../Paper';
+import Paper from '../../Paper';
 import {
   Box,
   Button,
@@ -19,20 +19,20 @@ const EponaChat = () => {
   // const [attachment, setAttachment] = useState<unknown>();
   const [isEponaChatOpen, toggleEponaChat] = useToggle(false);
   const [userInput, setUserInput] = useState<string>('');
-  const [chatHistory, setChatHistory] = useState<ChatMessageProps['chat'][]>(
-    []
-  );
+  const [chatHistory, setChatHistory] = useState<ChatMessageProps['chat'][]>([]);
   const { response, sendMessage, loading } = useEponaChatStream(userInput);
-  const lastAIMessage = useMemo<ChatMessageProps['chat']>(
-    () => ({
+  const lastAIMessage = useMemo<ChatMessageProps['chat'] | null>(() => {
+    if(!response) {
+      return null
+    }
+    return ({
       user: Participant.EPONA,
       message: response ?? '',
       date: new Date(),
-    }),
-    [response]
-  );
+    });
+  }, [response]);
 
-  const mess = [...chatHistory, lastAIMessage ? lastAIMessage : undefined];
+  const messages = useMemo(()=> lastAIMessage ? [...chatHistory, lastAIMessage] : chatHistory, [chatHistory, lastAIMessage]);
 
   const handleUserInputOnChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value),
@@ -44,15 +44,14 @@ const EponaChat = () => {
       e.preventDefault();
 
       const newHistory: ChatMessageProps['chat'][] = compact([
-        ...chatHistory,
-        lastAIMessage ? lastAIMessage : undefined,
+        ...messages,
         { user: Participant.USER, message: userInput, date: new Date() },
       ]);
       sendMessage();
       setUserInput('');
       setChatHistory(newHistory);
     },
-    [chatHistory, sendMessage, userInput]
+    [messages, sendMessage, userInput]
   );
 
   return (
@@ -74,7 +73,7 @@ const EponaChat = () => {
           }}
         >
           <Box width="100%" sx={{ overflowY: 'auto' }} flexGrow={1}>
-            {mess.map((chat) => {
+            {messages.map((chat) => {
               if (!chat) {
                 return null;
               }
@@ -101,7 +100,7 @@ const EponaChat = () => {
             <IconButton color={'secondary'} disabled>
               <AttachFile />
             </IconButton>
-            <IconButton color={'secondary'} type="submit">
+            <IconButton color={'secondary'} type="submit" disabled={loading}>
               <Send />
             </IconButton>
           </Box>

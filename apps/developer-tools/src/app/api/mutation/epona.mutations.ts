@@ -1,6 +1,6 @@
-import { server } from '../apiAdresses';
+import { serverAddress } from '../apiAdresses';
 
-export const eponaChat= (data:{message: string})=>fetch(`${server}/epona/chat`, {
+export const eponaChat= (data:{message: string})=>fetch(`${serverAddress}/epona/chat`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(data),

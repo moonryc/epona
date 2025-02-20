@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EponaModule } from './epona/epona.module';
-import { AppGateway } from './AppGateway';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [EponaModule],

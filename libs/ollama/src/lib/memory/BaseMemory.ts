@@ -1,11 +1,11 @@
 import { BaseMemoryMessage, SystemMessage } from '../messages';
 
-export default class BaseMemory {
-  protected messagesHistory: BaseMemoryMessage[] = [];
-  protected prompt: SystemMessage;
+export default abstract class BaseMemory {
+  protected _messages: BaseMemoryMessage[] = [];
+  protected _prompt: SystemMessage;
 
   constructor(prompt: SystemMessage) {
-    this.prompt = prompt;
+    this._prompt = prompt;
   }
 
   public get messages(): readonly BaseMemoryMessage[] {
@@ -20,11 +20,11 @@ export default class BaseMemory {
     throw new Error("Method not implemented.");
   }
 
-  delete(message: BaseMemoryMessage) {
+  public delete(message: BaseMemoryMessage) {
     throw new Error("Method not implemented.");
   }
 
-  reset(): void {
+  public reset(): void {
     throw new Error("Method not implemented.");
   }
 

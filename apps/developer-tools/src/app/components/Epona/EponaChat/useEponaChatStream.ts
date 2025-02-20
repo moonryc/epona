@@ -25,9 +25,9 @@ export const useEponaChatStream = (message:string) => {
           toggleLoading(false)
           break;
         }
-
-        const text = decoder.decode(value, { stream: true });
-        console.log('Received chunk:', text);
+        //trims off the end of each message
+        const text = decoder.decode(value, { stream: true }).replace(/\n/, '');
+        // console.log('Received chunk:', text, text.split(''));
 
         setResponse((prev) => {
           if(!prev){
