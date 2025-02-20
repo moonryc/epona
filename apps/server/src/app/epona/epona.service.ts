@@ -24,11 +24,13 @@ export class EponaService {
       input.message = "whats the weather?";
     }
     const stream = await this.epona.chatStream(input.message);
+    let aiReponse = ''
     for await (const ch of stream) {
       console.log("Sending chunk:", ch.message.content);
+      aiReponse += ch.message.content;
       res.write(`${ch.message.content}\n`);
     }
-
+    this.epona.saveResponseToMemory(aiReponse);
     return res.end();
   }
 

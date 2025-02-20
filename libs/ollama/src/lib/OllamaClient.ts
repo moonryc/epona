@@ -48,15 +48,6 @@ export default class OllamaClient {
     return this._unparsedKeepAlive
   }
 
-  protected async saveStreamToMemory(stream: AbortableAsyncIterator<ChatResponse>) {
-    let response = ''
-    for await (const ch of stream) {
-      response += ch.message.content;
-    }
-    const newAIMessage = new AssistantMessage(response)
-    this._memory.add(newAIMessage);
-  }
-
   protected async chat(messages: Message[]) {
     return this._client.chat({
       model: this._model,
@@ -101,6 +92,13 @@ export default class OllamaClient {
       }
     }
     return messages;
+  }
+
+  /**
+   * Use this Post streamChat
+   */
+  public saveResponseToMemory(aiMessage:string){
+    this._memory.add(new AssistantMessage(aiMessage))
   }
 
   // async converse(input: OllamaChatParams) {
