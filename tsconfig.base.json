@@ -18,6 +18,7 @@
     "paths": {
       "@epona/backend-config": ["libs/backend-config/src/index.ts"],
       "@epona/epona-client": ["libs/epona-client/src/index.ts"],
+      "@epona/epona-db": ["libs/epona-db/src/index.ts"],
       "@epona/ollama": ["libs/ollama/src/index.ts"],
       "@epona/tools": ["libs/tools/src/index.ts"]
     }

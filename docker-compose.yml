@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:13.6-alpine
+    restart: unless-stopped
+    volumes:
+      - ${HOSTFOLDER:-.}/db-exports/uncompressed:/docker-entrypoint-initdb.d:cached
+      - "db-storage:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: epona
+      POSTGRES_PASSWORD: epona
+    ports:
+      - 5400:5432
+volumes:
+  db-storage:

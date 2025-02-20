@@ -3,9 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EponaModule } from './epona/epona.module';
 import { AppGateway } from './app.gateway';
+import { EponaDbModule } from '@epona/epona-db';
 
 @Module({
-  imports: [EponaModule],
+  imports: [
+    EponaModule,
+    EponaDbModule,
+  ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
 })
