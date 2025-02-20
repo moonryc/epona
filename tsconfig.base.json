@@ -21,7 +21,8 @@
       "@epona/epona-db": ["libs/epona-db/src/index.ts"],
       "@epona/ollama": ["libs/ollama/src/index.ts"],
       "@epona/tools": ["libs/tools/src/index.ts"]
-    }
+    },
+    "strictPropertyInitialization": false
   },
   "exclude": ["node_modules", "tmp"]
 }

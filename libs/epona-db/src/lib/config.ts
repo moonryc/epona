@@ -1,7 +1,7 @@
 import { get as getEnv } from 'env-var';
 
 export default {
-  dbName: getEnv("DB_NAME").default("epona_db").asString(),
+  dbName: getEnv("DB_NAME").default("postgres").asString(),
   username: getEnv("DB_USERNAME").default("epona").asString(),
   password: getEnv("DB_PASSWORD").default("epona").asString(),
   host: getEnv("DB_HOST").default("localhost").asString(),

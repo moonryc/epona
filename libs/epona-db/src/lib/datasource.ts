@@ -3,7 +3,7 @@ import { NamingStrategy } from './namingStrategy';
 import config from "./config"
 import EponaChatMessage from './epona-chat-message/epona-chat-message.entity';
 
-export const AppDataSource = new DataSource({
+export default new DataSource({
   type: 'postgres',
   namingStrategy: new NamingStrategy(),
   host: config.host,

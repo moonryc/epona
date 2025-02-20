@@ -7,32 +7,37 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
-import { AttachFile, Send } from '@mui/icons-material';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AttachFile, Delete, Send } from '@mui/icons-material';
 import ChatMessage, { ChatMessageProps, Participant } from './ChatMessage';
 import { useToggle } from 'react-use';
 import { useEponaChatStream } from './useEponaChatStream';
 import { compact } from 'lodash';
 
-const EponaChat = () => {
+type EponaChatProps = {
+  open: boolean
+  closeChat: ()=> void
+}
+
+const EponaChat = ({open, closeChat}:EponaChatProps) => {
   // TODO: add attachments
   // const [attachment, setAttachment] = useState<unknown>();
-  const [isEponaChatOpen, toggleEponaChat] = useToggle(false);
   const [userInput, setUserInput] = useState<string>('');
   const [chatHistory, setChatHistory] = useState<ChatMessageProps['chat'][]>([]);
+  const ref = useRef< HTMLDivElement| null>(null);
   const { response, sendMessage, loading } = useEponaChatStream(userInput);
-  const lastAIMessage = useMemo<ChatMessageProps['chat'] | null>(() => {
+  const messages = useMemo(() => {
     if(!response) {
-      return null
+      return chatHistory;
     }
-    return ({
+    return [...chatHistory, {
       user: Participant.EPONA,
       message: response ?? '',
       date: new Date(),
-    });
-  }, [response]);
+    }]
+  }, [chatHistory, response]);
 
-  const messages = useMemo(()=> lastAIMessage ? [...chatHistory, lastAIMessage] : chatHistory, [chatHistory, lastAIMessage]);
+  const clearMessages = useCallback(()=>setChatHistory([]),[])
 
   const handleUserInputOnChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value),
@@ -54,14 +59,19 @@ const EponaChat = () => {
     [messages, sendMessage, userInput]
   );
 
+  useEffect(() => {
+    if(ref.current){
+      ref.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
     <>
-      <Button onClick={toggleEponaChat}>EPONA CHAT</Button>
       <Drawer
         title={'Epona Chat'}
-        open={isEponaChatOpen}
+        open={open}
         anchor={'right'}
-        onClose={toggleEponaChat}
+        onClose={closeChat}
       >
         <Paper
           title={'Epona Chat'}
@@ -81,6 +91,7 @@ const EponaChat = () => {
                 <ChatMessage key={chat.date.getMilliseconds()} chat={chat} />
               );
             })}
+            <div ref={ref}/>
           </Box>
           <Box flexGrow={1} />
           <Divider sx={{ m: 2 }} />
@@ -97,6 +108,9 @@ const EponaChat = () => {
               value={userInput}
               onChange={handleUserInputOnChange}
             />
+            <IconButton color={'secondary'} onClick={clearMessages}>
+              <Delete/>
+            </IconButton>
             <IconButton color={'secondary'} disabled>
               <AttachFile />
             </IconButton>

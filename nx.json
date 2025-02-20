@@ -77,5 +77,10 @@
         "linter": "eslint"
       }
     }
+  },
+  "projects": {
+    "epona-db": {
+      "tags": []
+    }
   }
 }

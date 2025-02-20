@@ -9,20 +9,20 @@ export enum MessageSource {
 @Entity('epona_chats')
 export default class EponaChatMessage {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column('text')
-  content: string;
+  content!: string;
 
   @Column('simple-array', { nullable: true })
   images?: string[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({
     type: 'enum',
     enum: MessageSource,
   })
-  role: MessageSource;
+  role!: MessageSource;
 }

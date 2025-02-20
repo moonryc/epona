@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NamingStrategy } from './namingStrategy';
-import {config} from "@epona/backend-config"
+import config from "./config"
 import EponaChatMessageModuleDB from './epona-chat-message/epona-chat-message.module';
 
 @Module({
@@ -9,11 +9,11 @@ import EponaChatMessageModuleDB from './epona-chat-message/epona-chat-message.mo
     TypeOrmModule.forRoot({
       type: 'postgres',
       namingStrategy: new NamingStrategy(),
-      host: config.db.host,
-      port: config.db.port,
-      username: config.db.username,
-      password: config.db.password,
-      database: config.db.dbName,
+      host: config.host,
+      port: config.port,
+      username: config.username,
+      password: config.password,
+      database: config.dbName,
       autoLoadEntities: true,
       migrations: [`${__dirname}/typeorm-migrations/**/*.{js,ts}`],
       migrationsTableName: "typeorm_migrations",

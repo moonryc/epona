@@ -1,31 +1,62 @@
-import { Button, Stack } from '@mui/material';
-import Paper from '../../Paper';
-import { useToastMutation } from '../../../hooks/useToastMutation';
+import { Grid2, IconButton, Typography, useTheme } from '@mui/material';
 import { useMemo } from 'react';
-import healthCheck from '../../../api/mutation/healthCheck';
 import EponaChat from '../EponaChat/EponaChat';
 import { useAllToasts } from '../../../hooks/useAllToasts';
+import { useToggle } from 'react-use';
+import { Chat, FileOpen, Save } from '@mui/icons-material';
 
-const EponaTest = () => {
-  const {dummyToast} = useAllToasts()
+const EponaDashboard = () => {
+  const { dummyToast } = useAllToasts();
   // const saveMemoryMutation= useToastMutation()
   // const loadMemoryMutation = useToastMutation()
+  const theme = useTheme();
+  const [isChatOpen, toggleChat] = useToggle(false);
 
-  const buttons = useMemo<{name:string, action:()=>void}[]>(()=>{
+  const iconButton = {
+    bgcolor: theme.palette.secondary.main,
+    '&:hover': { backgroundColor: theme.palette.primary.light },
+  };
+
+  const buttons = useMemo(() => {
+    const buttonSx = {
+      fill: theme.palette.primary.main,
+    };
+
     return [
-      { name: "SAVE MEMORY", action:  dummyToast },
-      { name: "LOAD MEMORY", action: dummyToast },
-    ]
-  },[dummyToast])
+      { icon: <Chat sx={buttonSx} />, name: 'CHAT', action: toggleChat },
+      { icon: <Save sx={buttonSx} />, name: 'SAVE MEMORY', action: dummyToast },
+      {
+        icon: <FileOpen sx={buttonSx} />,
+        name: 'LOAD MEMORY',
+        action: dummyToast,
+      },
+    ] as const;
+  }, [dummyToast, theme.palette.primary.main, toggleChat]);
 
   return (
-    <Paper title={"Epona Tests"}>
-      <Stack spacing={2} m={2}>
-        <EponaChat/>
-        {buttons.map((button) => (<Button key={button.name} variant={"contained"} onClick={()=>button.action()}>{button.name}</Button>))}
-      </Stack>
-    </Paper>
+    <Grid2 container spacing={2} m={2}>
+      {buttons.map((button) => (
+        <Grid2
+          size={{ sm: 6, md: 4 }}
+          display={'flex'}
+          flexDirection={'column'}
+          alignItems={'center'}
+          alignContent={'center'}
+          justifyContent={'center'}
+        >
+          <IconButton
+            color={'secondary'}
+            sx={iconButton}
+            onClick={button.action}
+          >
+            {button.icon}
+          </IconButton>
+          <Typography>{button.name}</Typography>
+        </Grid2>
+      ))}
+      <EponaChat open={isChatOpen} closeChat={toggleChat} />
+    </Grid2>
   );
 };
 
-export default EponaTest;
+export default EponaDashboard;
