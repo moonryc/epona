@@ -1,8 +1,7 @@
-import { Conversation } from '@epona/epona-db';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ConversationFilterInput, CreateConversationInput, UpdateConversationInput } from './conversation.inputs';
 import ConversationService from './conversation.service';
-import { ConversationWithCount } from './conversation.model';
+import { Conversation, ConversationWithCount } from './conversation.model';
 import { SuccessResponse } from '../Responses';
 
 @Resolver(() => Conversation)

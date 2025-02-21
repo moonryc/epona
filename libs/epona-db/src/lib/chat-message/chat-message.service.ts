@@ -8,14 +8,14 @@ import ChatMessage from './chat-message.entity';
 export default class ChatMessageServiceDB {
   constructor(
     @InjectRepository(ChatMessage)
-    private eponaChatMessageRepository: Repository<ChatMessage>,
+    private chatMessageRepository: Repository<ChatMessage>,
   ) {}
 
   private repository(trx?: EntityManager) {
-    return trx ? trx.getRepository(ChatMessage) : this.eponaChatMessageRepository;
+    return trx ? trx.getRepository(ChatMessage) : this.chatMessageRepository;
   }
 
-  async create(eponaChatMessage: Omit<ChatMessage, "id" | "createdAt">, trx?: EntityManager) {
+  async create(eponaChatMessage: Omit<ChatMessage, "id" | "createdAt" | "conversation">, trx?: EntityManager) {
     return this.repository(trx).save(eponaChatMessage);
   }
 

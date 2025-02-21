@@ -1,4 +1,4 @@
-import { ChatMessage } from '@epona/epona-db';
+import { ChatMessage } from './chat-message.model';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ChatMessageFilterInput, CreateChatMessageInput, UpdateChatMessageInput } from './chat-message.inputs';
 import ChatMessageService from './chat-message.service';

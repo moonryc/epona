@@ -1,10 +1,11 @@
-import { ConversationServiceDB } from '@epona/epona-db';
+import { ConversationModuleDB } from '@epona/epona-db';
 import { Module } from '@nestjs/common';
 import { ConversationResolver } from './conversation.resolver';
 import ConversationService from './conversation.service';
 
 @Module({
-  providers: [ConversationResolver, ConversationService, ConversationServiceDB],
-  exports: [ConversationService],
+    imports: [ConversationModuleDB],
+    providers: [ConversationResolver, ConversationService],
+    exports: [ConversationService],
 })
-export class ConversationModule {}
+export class ConversationModule { }

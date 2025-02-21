@@ -8,6 +8,8 @@ import { EponaDbModule } from '@epona/epona-db';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { ChatMessageModule } from './chat-message/chat-message.module';
+import { ConversationModule } from './conversation/conversation.module';
 
 @Module({
   imports: [
@@ -15,11 +17,14 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
     EponaDbModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+    
       autoSchemaFile: join(process.cwd(), 'gql/generated/schema.gql'),
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       sortSchema: true,
     }),
+    ChatMessageModule,
+    ConversationModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

@@ -1,0 +1,110 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ChatMessage {
+  content: String!
+  conversationId: String
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+  userId: String
+}
+
+input ChatMessageFilterInput {
+  conversationId: String
+  ids: [String!]
+  isSummary: Boolean
+  role: MessageSource
+  skip: Float
+  take: Float
+}
+
+type ChatMessageWithCount {
+  count: Float!
+  items: [ChatMessage!]!
+}
+
+type Conversation {
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  owner: ConversationOwner!
+  prompt: String!
+}
+
+input ConversationFilterInput {
+  skip: Float
+  take: Float
+  withDeleted: Boolean
+}
+
+enum ConversationOwner {
+  EPONA
+}
+
+type ConversationWithCount {
+  conversation: Conversation!
+  count: Float!
+}
+
+input CreateChatMessageInput {
+  content: String!
+  conversationId: String!
+  images: [String!]
+  isSummary: Boolean!
+  role: MessageSource!
+}
+
+input CreateConversationInput {
+  name: String!
+  owner: ConversationOwner!
+  prompt: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum MessageSource {
+  ASSISTANT
+  SYSTEM
+  USER
+}
+
+type Mutation {
+  createChatMessage(input: CreateChatMessageInput!): ChatMessage!
+  createConversation(input: CreateConversationInput!): Conversation!
+  deleteChatMessages(ids: [String!]!): SuccessResponse!
+  deleteConversations(ids: [String!]!): SuccessResponse!
+  updateChatMessage(input: UpdateChatMessageInput!): ChatMessage!
+  updateConversation(input: UpdateConversationInput!): Conversation!
+}
+
+type Query {
+  chatMessages(input: ChatMessageFilterInput): [ChatMessage!]!
+  chatMessagesWithCount(input: ChatMessageFilterInput): [ChatMessageWithCount!]!
+  conversations(input: ConversationFilterInput): [Conversation!]!
+  conversationsWithCount(input: ConversationFilterInput): [ConversationWithCount!]!
+}
+
+type SuccessResponse {
+  message: String
+  success: Boolean!
+}
+
+input UpdateChatMessageInput {
+  content: String
+  id: String!
+  images: [String!]
+  isSummary: Boolean
+  role: MessageSource
+}
+
+input UpdateConversationInput {
+  id: String!
+  name: String
+  owner: ConversationOwner
+  prompt: String
+}

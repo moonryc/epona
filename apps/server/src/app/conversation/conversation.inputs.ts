@@ -1,6 +1,10 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { FindManyOptions } from 'typeorm';
 import { Conversation, ConversationOwner } from '@epona/epona-db';
+
+registerEnumType(ConversationOwner, {
+    name: 'ConversationOwner',
+});
 
 @InputType()
 export class CreateConversationInput {

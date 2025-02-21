@@ -1,32 +1,32 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Conversation } from '../conversation/conversation.model';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ChatMessage as DBChatMessage } from '@epona/epona-db';
 
 @ObjectType()
-export class ChatMessage {
-  @Field(() => String)
-  id: string;
+export class ChatMessage implements Partial<DBChatMessage> {
+    @Field(() => ID)
+    id: string;
 
-  @Field()
-  createdAt: Date;
+    @Field()
+    content: string;
 
-  @Field()
-  content: string;
+    @Field()
+    createdAt: Date;
 
-  @Field()
-  role: string;
+    @Field()
+    updatedAt: Date;
 
-  @Field(() => Conversation)
-  conversation: Conversation;
+    @Field(() => String, { nullable: true })
+    userId?: string;
 
-  @Field(() => String)
-  conversationId: string;
+    @Field(() => String, { nullable: true })
+    conversationId?: string;
 }
 
 @ObjectType()
 export class ChatMessageWithCount {
-  @Field(() => ChatMessage)
-  chatMessage: ChatMessage;
+    @Field(() => [ChatMessage])
+    items: ChatMessage[];
 
-  @Field(() => Number)
-  count: number;
+    @Field()
+    count: number;
 }
