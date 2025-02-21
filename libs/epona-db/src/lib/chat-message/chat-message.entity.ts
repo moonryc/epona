@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import Conversation from '../conversation/conversation.entity';
 
 export enum MessageSource {
   SYSTEM = 'System',
@@ -7,9 +8,13 @@ export enum MessageSource {
 }
 
 @Entity('epona_chats')
-export default class EponaChatMessage {
+export default class ChatMessage {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @Index()
+  @Column('boolean', { default: false })
+  isSummary!: boolean;
 
   @Column('text')
   content!: string;
@@ -25,4 +30,7 @@ export default class EponaChatMessage {
     enum: MessageSource,
   })
   role!: MessageSource;
+
+  @ManyToOne(() => Conversation, (conversation) => conversation.messages)
+  conversation: Conversation;
 }

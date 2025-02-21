@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { NamingStrategy } from './namingStrategy';
 import config from "./config"
-import EponaChatMessage from './epona-chat-message/epona-chat-message.entity';
 
 export default new DataSource({
   type: 'postgres',
@@ -11,7 +10,7 @@ export default new DataSource({
   username: config.username,
   password: config.password,
   database: config.dbName,
-  entities: [EponaChatMessage],
+  entities: [`${__dirname}/**/*.entity.{js,ts}`],
   migrations: [`${__dirname}/typeorm-migrations/**/*.{js,ts}`],
   migrationsTableName: "typeorm_migrations",
 });

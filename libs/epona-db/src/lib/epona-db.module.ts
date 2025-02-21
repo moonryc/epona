@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NamingStrategy } from './namingStrategy';
 import config from "./config"
-import EponaChatMessageModuleDB from './epona-chat-message/epona-chat-message.module';
+import ChatMessageModuleDB from './chat-message/chat-message.module';
 
 @Module({
   imports: [
@@ -19,10 +19,10 @@ import EponaChatMessageModuleDB from './epona-chat-message/epona-chat-message.mo
       migrationsTableName: "typeorm_migrations",
       synchronize: false,
     }),
-    EponaChatMessageModuleDB
+    ChatMessageModuleDB
   ],
   exports: [
-    EponaChatMessageModuleDB
+    ChatMessageModuleDB
   ]
 })
 export default class EponaDbModule {}

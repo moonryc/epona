@@ -1,8 +1,15 @@
+import { Field, ObjectType } from '@nestjs/graphql';
+
+@ObjectType()
 export class SuccessResponse {
-  constructor({success, message}: {success: boolean, message?: string}) {
+  @Field(() => Boolean)
+  success: boolean;
+
+  @Field(() => String, { nullable: true })
+  message?: string;
+
+  constructor({ success, message }: { success: boolean; message?: string }) {
     this.success = success;
     this.message = message;
   }
-  success: boolean;
-  message: string | undefined;
 }

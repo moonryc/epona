@@ -1,33 +1,31 @@
-import Paper from '../../Paper';
+import { AttachFile, Delete, Send } from '@mui/icons-material';
 import {
   Box,
-  Button,
   Divider,
   Drawer,
   IconButton,
-  TextField,
+  TextField
 } from '@mui/material';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AttachFile, Delete, Send } from '@mui/icons-material';
-import ChatMessage, { ChatMessageProps, Participant } from './ChatMessage';
-import { useToggle } from 'react-use';
-import { useEponaChatStream } from './useEponaChatStream';
 import { compact } from 'lodash';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Paper from '../../Paper';
+import ChatMessage, { ChatMessageProps, Participant } from './ChatMessage';
+import { useEponaChatStream } from './useEponaChatStream';
 
 type EponaChatProps = {
   open: boolean
-  closeChat: ()=> void
+  closeChat: () => void
 }
 
-const EponaChat = ({open, closeChat}:EponaChatProps) => {
+const EponaChat = ({ open, closeChat }: EponaChatProps) => {
   // TODO: add attachments
   // const [attachment, setAttachment] = useState<unknown>();
   const [userInput, setUserInput] = useState<string>('');
   const [chatHistory, setChatHistory] = useState<ChatMessageProps['chat'][]>([]);
-  const ref = useRef< HTMLDivElement| null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const { response, sendMessage, loading } = useEponaChatStream(userInput);
   const messages = useMemo(() => {
-    if(!response) {
+    if (!response) {
       return chatHistory;
     }
     return [...chatHistory, {
@@ -37,7 +35,7 @@ const EponaChat = ({open, closeChat}:EponaChatProps) => {
     }]
   }, [chatHistory, response]);
 
-  const clearMessages = useCallback(()=>setChatHistory([]),[])
+  const clearMessages = useCallback(() => setChatHistory([]), [])
 
   const handleUserInputOnChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value),
@@ -60,13 +58,12 @@ const EponaChat = ({open, closeChat}:EponaChatProps) => {
   );
 
   useEffect(() => {
-    if(ref.current){
+    if (ref.current) {
       ref.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
   return (
-    <>
       <Drawer
         title={'Epona Chat'}
         open={open}
@@ -91,7 +88,7 @@ const EponaChat = ({open, closeChat}:EponaChatProps) => {
                 <ChatMessage key={chat.date.getMilliseconds()} chat={chat} />
               );
             })}
-            <div ref={ref}/>
+            <div ref={ref} />
           </Box>
           <Box flexGrow={1} />
           <Divider sx={{ m: 2 }} />
@@ -109,7 +106,7 @@ const EponaChat = ({open, closeChat}:EponaChatProps) => {
               onChange={handleUserInputOnChange}
             />
             <IconButton color={'secondary'} onClick={clearMessages}>
-              <Delete/>
+              <Delete />
             </IconButton>
             <IconButton color={'secondary'} disabled>
               <AttachFile />
@@ -120,7 +117,6 @@ const EponaChat = ({open, closeChat}:EponaChatProps) => {
           </Box>
         </Paper>
       </Drawer>
-    </>
   );
 };
 
