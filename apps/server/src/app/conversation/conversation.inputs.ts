@@ -40,7 +40,7 @@ export class ConversationWhere {
 }
 
 @InputType()
-export class ConversationFilterInput implements Partial<FindManyOptions<Conversation>> {
+export class ConversationsInput implements Partial<FindManyOptions<Conversation>> {
     @Field(() => Number, { nullable: true })
     take?: number;
 

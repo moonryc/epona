@@ -4,10 +4,28 @@ import EponaChat from '../EponaChat/EponaChat';
 import { useAllToasts } from '../../../hooks/useAllToasts';
 import { useToggle } from 'react-use';
 import { Chat, FileOpen, Save } from '@mui/icons-material';
+import { useSaveMemoryMutation } from '../../../api/generated/graphql';
 
 const EponaDashboard = () => {
-  const { dummyToast } = useAllToasts();
-  // const saveMemoryMutation= useToastMutation()
+  const { dummyToast, successToast, errorToast } = useAllToasts();
+  
+
+  const [saveMemoryMutation] = useSaveMemoryMutation({
+    variables: {
+      input:{
+        conversationId: '1',
+      }
+    },
+    onCompleted: (data) => {
+      if(!data.saveMemory.success){
+        errorToast(data.saveMemory.message);
+      }
+      successToast('Memory saved');
+    },
+    onError: () => {
+      errorToast('Error saving memory');
+    },
+  });
   // const loadMemoryMutation = useToastMutation()
   const theme = useTheme();
   const [isChatOpen, toggleChat] = useToggle(false);
@@ -24,7 +42,7 @@ const EponaDashboard = () => {
 
     return [
       { icon: <Chat sx={buttonSx} />, name: 'CHAT', action: toggleChat },
-      { icon: <Save sx={buttonSx} />, name: 'SAVE MEMORY', action: dummyToast },
+      { icon: <Save sx={buttonSx} />, name: 'SAVE MEMORY', action: saveMemoryMutation },
       {
         icon: <FileOpen sx={buttonSx} />,
         name: 'LOAD MEMORY',

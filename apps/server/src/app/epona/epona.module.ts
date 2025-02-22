@@ -4,6 +4,7 @@ import { Provider } from '@nestjs/common';
 import { EponaController } from './epona.controller';
 import { EponaService } from './epona.service';
 import { ChatMessageModule } from '../chat-message/chat-message.module';
+import { EponaResolver } from './epona.resolver';
 
 const EPONA_PROVIDER: Provider = {
   provide: 'EPONA_SINGLETON',
@@ -12,7 +13,7 @@ const EPONA_PROVIDER: Provider = {
 
 @Module({
   imports: [ChatMessageModule],
-  providers: [EPONA_PROVIDER, EponaService],
+  providers: [EPONA_PROVIDER, EponaService, EponaResolver],
   controllers: [EponaController],
   exports: ['EPONA_SINGLETON', EponaService],
 })

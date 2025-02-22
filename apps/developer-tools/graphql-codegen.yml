@@ -1,11 +1,10 @@
 overwrite: true
 watch: false
-schema:
-  - apps/server/src/app/gql/generated/schema.gql
-  - src/apps/developer-tools/src/app/api/gql/schemas/**/*.graphql
-documents: "src/apps/developer-tools/src/app/api/**/*.graphql"
+schema: http://localhost:3000/graphql
+documents:
+  - apps/developer-tools/src/app/api/gql/**/*.gql
 generates:
-  ./src/apps/developer-tools/src/app/api/generated/graphql.tsx:
+  apps/developer-tools/src/app/api/generated/graphql.tsx:
     plugins:
       - add:
           content: "/* eslint-disable */"

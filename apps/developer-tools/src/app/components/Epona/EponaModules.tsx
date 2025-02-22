@@ -1,34 +1,24 @@
-import { useMemo } from 'react';
 import {
-  Accordion,
-  AccordionSummary,
-  Divider,
   FormControlLabel,
   Grid2,
-  Switch,
-  Typography,
+  Switch
 } from '@mui/material';
-import { ArrowDownward } from '@mui/icons-material';
+import { useMemo } from 'react';
+import Accordion from '../Accordion';
+
 
 const EponaModules = () => {
   const modules = useMemo(
-    () =>
-      new Array(10).fill(
-        <FormControlLabel control={<Switch defaultChecked />} label="Label" />
-      ),
+    () =>["Deep Learning", "Browser Use", "Images", "Emotions"],
     []
   );
 
   return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ArrowDownward />}>
-        <Typography>MODULES</Typography>
-      </AccordionSummary>
-      <Divider />
+    <Accordion title="modules">
       <Grid2 container spacing={2} m={2}>
         {modules.map((module) => (
           <Grid2 display={'flex'} justifyContent={'center'} size={{ xs: 3 }}>
-            {module}
+            <FormControlLabel control={<Switch defaultChecked />} label={module} />
           </Grid2>
         ))}
       </Grid2>

@@ -1,7 +1,7 @@
 import { ConversationServiceDB, Conversation } from "@epona/epona-db";
 import { Injectable } from "@nestjs/common";
 import type { EntityManager } from 'typeorm';
-import { CreateConversationInput, UpdateConversationInput, ConversationFilterInput } from './conversation.inputs';
+import { CreateConversationInput, UpdateConversationInput, ConversationsInput } from './conversation.inputs';
 
 @Injectable()
 export default class ConversationService {
@@ -17,11 +17,11 @@ export default class ConversationService {
         return this.conversationServiceDB.updateById(input);
     }
 
-    async find(input: ConversationFilterInput) {
+    async find(input: ConversationsInput) {
         return this.conversationServiceDB.find(input);
     }
 
-    async findAndCount(input: ConversationFilterInput) {
+    async findAndCount(input: ConversationsInput) {
         return this.conversationServiceDB.findAndCount(input);
     }
 

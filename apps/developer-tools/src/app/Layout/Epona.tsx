@@ -1,10 +1,9 @@
 import { ArrowDownward } from '@mui/icons-material';
 import { Accordion, AccordionSummary, Box, Divider, Grid2, Typography } from '@mui/material';
-import EponaModules from '../components/Epona/EponaModules';
-import EponaDashoard from '../components/Epona/EponaDashboard/EponaDashboard';
-import PromptUpdater from '../components/Epona/PromptUpdater';
-import EponaStatus from '../components/Epona/ServerStatus';
 import EponaConversations from '../components/Epona/EponaConversations/EponaConversations';
+import EponaDashoard from '../components/Epona/EponaDashboard/EponaDashboard';
+import EponaModules from '../components/Epona/EponaModules';
+import EponaStatus from '../components/Epona/ServerStatus';
 
 const Epona = () => {
   return (
@@ -22,7 +21,6 @@ const Epona = () => {
         </Grid2>
         <Grid2 size={{ xs: 12 }}>
           <EponaConversations />
-          <PromptUpdater />
           <EponaModules />
         </Grid2>
       </Grid2>

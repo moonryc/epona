@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import darkTheme from './app/theme';
+import { ApolloProvider } from './app/providers/ApolloProvider';
 
 const queryClient = new QueryClient();
 
@@ -14,13 +15,15 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
+    <ApolloProvider>
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
       <SnackbarProvider>
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
+    </ApolloProvider>
   </StrictMode>
 );
