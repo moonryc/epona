@@ -1,16 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ChatDto } from './epona.input';
+import { ChatDto, SaveMemoryInput } from './epona.input';
 import { EponaSingleton } from './epona.singleton';
 import { SuccessResponse } from '../Responses';
 import { EponaClient } from '@epona/epona-client';
 import {Response} from 'express';
+import ChatMessageService from '../chat-message/chat-message.service';
 
 @Injectable()
 export class EponaService {
   private epona: EponaClient
 
   constructor(
-    @Inject('EPONA_SINGLETON') private readonly eponaSingleton: EponaSingleton
+    @Inject('EPONA_SINGLETON') private readonly eponaSingleton: EponaSingleton,
+    private readonly chatMessageService: ChatMessageService
   ) {
     this.epona = eponaSingleton.getInstance();
   }
@@ -34,9 +36,15 @@ export class EponaService {
     return res.end();
   }
 
-  async saveMemory() {
+  async saveMemory(input: SaveMemoryInput) {
     try{
-      await this.epona.saveMemory()
+      const chatHistoryExport =  this.epona.saveMemory()
+      const chatHistoryWithConversationId = chatHistoryExport.map(message => ({
+        ...message,
+        conversationId: input.conversationId,
+        images: message.images?.map(img => img instanceof Uint8Array ? Buffer.from(img).toString('base64') : img)
+      }))
+      await this.chatMessageService.upsertMany(chatHistoryWithConversationId)
       return new SuccessResponse({ success: true, message: 'Saved memory' });
     }catch(e){
       console.error(e);

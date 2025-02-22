@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Grid2,
   Switch,
+  Typography,
 } from '@mui/material';
 import { ArrowDownward } from '@mui/icons-material';
 
@@ -21,7 +22,7 @@ const EponaModules = () => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ArrowDownward />}>
-        MODULES
+        <Typography>MODULES</Typography>
       </AccordionSummary>
       <Divider />
       <Grid2 container spacing={2} m={2}>

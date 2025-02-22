@@ -1,0 +1,42 @@
+overwrite: true
+watch: false
+schema:
+  - apps/server/src/app/gql/generated/schema.gql
+  - src/apps/developer-tools/src/app/api/gql/schemas/**/*.graphql
+documents: "src/apps/developer-tools/src/app/api/**/*.graphql"
+generates:
+  ./src/apps/developer-tools/src/app/api/generated/graphql.tsx:
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-operations
+      - typescript-apollo-client-helpers
+      - typescript-react-apollo
+      - named-operations-object
+    config:
+      skipTypename: false
+      skipTypenameForRoot: true
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      withRefetchFn: true
+      dedupeOperationSuffix: true
+      pureMagicComment: true
+      # If you add a scalar here, add it for the backend graphql-codegen.yml too
+      scalars:
+        BigInt: number
+        LocalTime: string
+        DateTime: string
+        DateType: string
+        Date: string
+        TimestampType: string
+        TimeZone: string
+        Timestamp: number
+        Latitude: number
+        Longitude: number
+        #UUID (scalar: GraphQLUUID): Represents a uuid - strip the GraphQL part when adding
+        UUID: string
+        EmailAddress: string
+        JSON: string
+        MimeType: string

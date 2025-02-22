@@ -1,5 +1,5 @@
 import { Message } from 'ollama';
-
+import { v4 as uuidv4 } from 'uuid';
 enum MessageSource {
   SYSTEM = 'System',
   USER = 'User',
@@ -7,14 +7,28 @@ enum MessageSource {
 }
 
 
+type BaseMemoryProps = {
+  id?: string;
+  isSummary?: boolean;
+  content: Message["content"];
+  images?: Message["images"];
+  createdAt?: Date;
+}
+
 export class BaseMemoryMessage {
-  public readonly timestamp: number = new Date().getMilliseconds();
+  public readonly id: string;
+  public readonly isSummary: boolean;
+  public readonly createdAt: Date;
   public readonly role: MessageSource = MessageSource.SYSTEM
   public readonly content: Message["content"]
   public readonly images?: Message["images"]
 
-  constructor(message: string) {
-    this.content = message
+  constructor(input:BaseMemoryProps) {
+    this.id = input?.id ?? uuidv4();
+    this.content = input.content
+    this.isSummary = input?.isSummary ?? false
+    this.createdAt = input?.createdAt ?? new Date()
+    this.images = input?.images
   }
 }
 

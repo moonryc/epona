@@ -1,16 +1,15 @@
-import BaseMemory from './memory/BaseMemory';
-import OllamaConnection from './ollamaConnection';
+import { OllamaTools, ToolMaker } from '@epona/tools';
 import {
-  AbortableAsyncIterator,
+  Options as ChatModelOptions,
   ChatResponse,
   Message,
   Ollama,
-  Options as ChatModelOptions,
-  ToolCall,
+  ToolCall
 } from 'ollama';
-import { OllamaModels } from './models';
-import { OllamaTools, ToolMaker } from '@epona/tools';
+import BaseMemory from './memory/BaseMemory';
 import { AssistantMessage } from './messages';
+import { OllamaModels } from './models';
+import OllamaConnection from './ollamaConnection';
 
 export type OllamaClientProps = {
   host: string;
@@ -98,7 +97,7 @@ export default class OllamaClient {
    * Use this Post streamChat
    */
   public saveResponseToMemory(aiMessage:string){
-    this._memory.add(new AssistantMessage(aiMessage))
+    this._memory.add(new AssistantMessage({content:aiMessage}))
   }
 
   // async converse(input: OllamaChatParams) {

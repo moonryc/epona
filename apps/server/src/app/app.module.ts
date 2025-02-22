@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { join } from 'path';
+import path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EponaModule } from './epona/epona.module';
@@ -17,8 +17,7 @@ import { ConversationModule } from './conversation/conversation.module';
     EponaDbModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-    
-      autoSchemaFile: join(process.cwd(), 'gql/generated/schema.gql'),
+      autoSchemaFile: path.join(__dirname, 'src/app/gql/generated/foo.schema.gql').replace('dist/', ''),
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       sortSchema: true,

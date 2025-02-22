@@ -1,0 +1,7 @@
+fragment Conversation on Conversation {
+  createdAt
+  id
+  name
+  owner
+  prompt
+}

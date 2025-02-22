@@ -11,14 +11,4 @@ export class EponaController {
   steamChat(@Body() body: ChatDto, @Res()res: Response){
     return this.eponaService.chat(body,res)
   }
-
-  @Get('/saveMemory')
-  saveMemory() {
-    return this.eponaService.saveMemory();
-  }
-
-  @Get('/loadMemory')
-  loadMemory() {
-    return this.eponaService.loadMemory();
-  }
 }

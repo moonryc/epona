@@ -19,6 +19,10 @@ export default class ChatMessageServiceDB {
     return this.repository(trx).save(eponaChatMessage);
   }
 
+  async upsertMany(eponaChatMessages: ChatMessage[] | Omit<ChatMessage, "id" | "conversation">[], trx?: EntityManager) {
+    await this.repository(trx).upsert(eponaChatMessages, ["id"]);
+  }
+
   async updateById(eponaChatMessage: Pick<ChatMessage, "id"> &  Partial<ChatMessage>, trx?: EntityManager) {
     await this.repository(trx).update(eponaChatMessage.id, eponaChatMessage);
     return this.repository(trx).findOne({ where: { id: eponaChatMessage.id } });

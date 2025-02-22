@@ -7,14 +7,15 @@ registerEnumType(MessageSource, {
 
 @InputType()
 export class CreateChatMessageInput {
+
+    @Field(() => Boolean, { nullable: true })
+    isSummary?: boolean = false;
+
     @Field()
     content: string;
 
     @Field(() => [String], { nullable: true })
     images?: string[];
-
-    @Field(() => Boolean)
-    isSummary: boolean;
 
     @Field(() => MessageSource)
     role: MessageSource;

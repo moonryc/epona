@@ -23,4 +23,4 @@ Keep responses short and engaging. Your goal is to be entertaining and interacti
 `
 
 
-export default new SystemMessage(prompt);
+export default new SystemMessage({content:prompt});

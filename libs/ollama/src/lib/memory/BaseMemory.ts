@@ -28,11 +28,11 @@ export default abstract class BaseMemory {
     throw new Error("Method not implemented.");
   }
 
-  async createSnapshot(): Promise<BaseMemoryMessage[]> {
+  createSnapshot(): BaseMemoryMessage[] {
     throw new Error("Method not implemented.");
   }
 
-  async loadSnapshot(state: BaseMemoryMessage[]): Promise<void> {
+  loadSnapshot(state: BaseMemoryMessage[]) {
     throw new Error("Method not implemented.");
   }
 }

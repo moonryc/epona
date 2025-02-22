@@ -1,23 +1,28 @@
-import { ChatMessage, Conversation } from '@epona/epona-db';
-import { NestFactory } from '@nestjs/core';
-import { GraphQLSchemaBuilderModule, GraphQLSchemaFactory } from '@nestjs/graphql';
-import { writeFile } from 'fs/promises';
-import { printSchema } from 'graphql/utilities';
-import { join } from 'path';
+// import { NestFactory } from '@nestjs/core';
+// import { GraphQLSchemaBuilderModule, GraphQLSchemaFactory } from '@nestjs/graphql';
+// import { writeFile } from 'fs/promises';
+// import { printSchema } from 'graphql/utilities';
+// import { join } from 'path';
+// import { ConversationResolver } from './conversation/conversation.resolver';
+// import { ChatMessageResolver } from './chat-message/chat-message.resolver';
+// import { EponaResolver } from './epona/epona.resolver';
 
-const resolvers = [ChatMessage, Conversation]
+import { join } from "path";
 
-async function generateSchema() {
-    const app = await NestFactory.create(GraphQLSchemaBuilderModule);
-    await app.init();
+// const resolvers = [ConversationResolver, ChatMessageResolver, EponaResolver]
 
-    const schema = await app.get(GraphQLSchemaFactory).create(resolvers);
+// async function generateSchema() {
+//     const app = await NestFactory.create(GraphQLSchemaBuilderModule);
+//     await app.init();
 
-    const schemaSDL = printSchema(schema);
+//     const schema = await app.get(GraphQLSchemaFactory).create(resolvers);
 
-    const fileContent = `# eslint-disable\n\n${schemaSDL}`;
+//     const schemaSDL = printSchema(schema);
 
-    await writeFile(join(__dirname, '../gql/generated/schema.gql'), fileContent);
-}
+//     const fileContent = `# eslint-disable\n\n${schemaSDL}`;
 
-generateSchema();
+//     await writeFile(join(__dirname, '../gql/generated/schema.gql'), fileContent);
+// }
+
+// generateSchema();
+console.log(join(__dirname, 'gql/generated/schema.gql'))

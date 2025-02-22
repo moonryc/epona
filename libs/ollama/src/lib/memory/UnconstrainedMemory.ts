@@ -36,7 +36,7 @@ export default class UnconstrainedMemory extends BaseMemory {
     this._messages = [];
   }
 
-  public override async createSnapshot() {
+  public override createSnapshot() {
     return this._messages;
   }
 

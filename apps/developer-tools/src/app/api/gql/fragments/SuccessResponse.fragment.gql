@@ -1,0 +1,4 @@
+fragment SuccessResponse on SuccessResponse {
+  message
+  success
+}

@@ -8,7 +8,9 @@
     "nx:reset": "npx nx reset",
     "db:migrate": "npx ts-node -P ./libs/epona-db/tsconfig.lib.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./libs/epona-db/src/lib/datasource.ts",
     "db:generate-migration": "ts-node ./libs/epona-db/src/scripts/typeormMigrationGenerator.ts",
-    "db:revert": "npx ts-node -P ./libs/epona-db/tsconfig.lib.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./libs/epona-db/src/lib/datasource.ts"
+    "db:revert": "npx ts-node -P ./libs/epona-db/tsconfig.lib.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./libs/epona-db/src/lib/datasource.ts",
+    "generate": "ts-node --compilerOptions '{\"module\": \"commonjs\"}' apps/server/src/app/generateSchema.ts",
+    "generate:schema": "TZ=UTC graphql-codegen --config apps/developer-tools/graphql-codegen.yml"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +35,7 @@
     "class-validator": "^0.14.1",
     "env-var": "^7.5.0",
     "graphql": "^16.10.0",
+    "graphql-scalars": "^1.24.1",
     "inquirer": "^12.4.2",
     "lodash": "^4.17.21",
     "mysql2": "^3.12.0",
@@ -48,9 +51,18 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "typeorm": "^0.3.20",
-    "typeorm-naming-strategies": "^4.1.0"
+    "typeorm-naming-strategies": "^4.1.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^5.0.0",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/named-operations-object": "^3.0.0",
+    "@graphql-codegen/typescript": "^3.0.4",
+    "@graphql-codegen/typescript-apollo-client-helpers": "^3.0.0",
+    "@graphql-codegen/typescript-operations": "^3.0.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@graphql-codegen/typescript-resolvers": "^3.2.1",
     "@eslint/js": "^9.8.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
@@ -74,6 +86,7 @@
     "@types/node": "~18.16.9",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/ui": "^1.3.1",
     "eslint": "^9.8.0",

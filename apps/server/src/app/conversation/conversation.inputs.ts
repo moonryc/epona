@@ -34,6 +34,12 @@ export class UpdateConversationInput {
 }
 
 @InputType()
+export class ConversationWhere {
+    @Field(() => ConversationOwner, { nullable: true })
+    owner?: ConversationOwner;
+}
+
+@InputType()
 export class ConversationFilterInput implements Partial<FindManyOptions<Conversation>> {
     @Field(() => Number, { nullable: true })
     take?: number;
@@ -43,4 +49,7 @@ export class ConversationFilterInput implements Partial<FindManyOptions<Conversa
 
     @Field(() => Boolean, { nullable: true })
     withDeleted?: boolean;
+
+    @Field(() => ConversationWhere, { nullable: true })
+    where?: ConversationWhere;
 }

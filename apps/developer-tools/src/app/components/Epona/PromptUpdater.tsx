@@ -5,6 +5,7 @@ import {
   Button,
   Divider,
   TextField,
+  Typography,
 } from '@mui/material';
 import { ArrowDownward } from '@mui/icons-material';
 
@@ -12,7 +13,7 @@ const PromptUpdater = () => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ArrowDownward />}>
-        PROMPT
+        <Typography>PROMPT UPDATER</Typography>
       </AccordionSummary>
       <Divider />
       <Box display="flex" gap={2} m={2}>

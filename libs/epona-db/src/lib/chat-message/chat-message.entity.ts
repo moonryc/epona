@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import Conversation from '../conversation/conversation.entity';
-
+import { BaseMemoryMessage } from '@epona/ollama';
 export enum MessageSource {
   SYSTEM = 'System',
   USER = 'User',
@@ -8,7 +8,7 @@ export enum MessageSource {
 }
 
 @Entity('epona_chats')
-export default class ChatMessage {
+export default class ChatMessage implements BaseMemoryMessage {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -22,6 +22,7 @@ export default class ChatMessage {
   @Column('simple-array', { nullable: true })
   images?: string[];
 
+  @Index()
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -30,6 +31,10 @@ export default class ChatMessage {
     enum: MessageSource,
   })
   role!: MessageSource;
+
+  @Index()
+  @Column('uuid')
+  conversationId!: string;
 
   @ManyToOne(() => Conversation, (conversation) => conversation.messages)
   conversation: Conversation;

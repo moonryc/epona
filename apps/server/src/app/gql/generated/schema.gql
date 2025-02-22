@@ -52,7 +52,7 @@ input CreateChatMessageInput {
   content: String!
   conversationId: String!
   images: [String!]
-  isSummary: Boolean!
+  isSummary: Boolean = false
   role: MessageSource!
 }
 

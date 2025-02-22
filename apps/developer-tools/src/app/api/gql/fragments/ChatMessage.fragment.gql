@@ -1,0 +1,8 @@
+fragment ChatMessage on ChatMessage {
+  content
+  conversationId
+  createdAt
+  id
+  updatedAt
+  userId
+}
