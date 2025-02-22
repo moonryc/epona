@@ -1,0 +1,5 @@
+query ConversationById($conversationByIdId: String!) {
+  conversationById(id: $conversationByIdId) {
+    ...Conversation
+  }
+}

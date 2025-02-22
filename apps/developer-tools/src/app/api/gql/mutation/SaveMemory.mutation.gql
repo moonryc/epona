@@ -1,5 +1,0 @@
-mutation SaveMemory($input: SaveMemoryInput!) {
-  saveMemory(input: $input) {
-    ...SuccessResponse
-  }
-}

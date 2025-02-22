@@ -100,6 +100,7 @@ type Mutation {
 type Query {
   chatMessages(input: ChatMessagesInput): [ChatMessage!]!
   chatMessagesWithCount(input: ChatMessagesInput): [ChatMessageWithCount!]!
+  conversationById(id: String!): Conversation!
   conversations(input: ConversationsInput): [Conversation!]!
   conversationsWithCount(input: ConversationsInput): [ConversationWithCount!]!
 }

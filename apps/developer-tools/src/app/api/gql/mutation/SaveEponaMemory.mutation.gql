@@ -1,0 +1,5 @@
+mutation SaveEponaMemory($input: SaveEponaMemoryInput!) {
+  saveEponaMemory(input: $input) {
+    ...SuccessResponse
+  }
+}

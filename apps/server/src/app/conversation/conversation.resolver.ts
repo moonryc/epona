@@ -10,6 +10,14 @@ export class ConversationResolver {
         private readonly conversationService: ConversationService,
     ) { }
 
+    @Query(() => Conversation)
+    async conversationById(
+        @Args('id') id: string,
+    ) {
+        return this.conversationService.findById(id);
+    }
+
+    
     @Query(() => [Conversation])
     async conversations(
         @Args('input', { nullable: true }) options?: Conversations,

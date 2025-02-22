@@ -1,4 +1,4 @@
-import { OllamaClient, UserMessage } from '@epona/ollama';
+import { BaseMemoryMessage, OllamaClient, UserMessage } from '@epona/ollama';
 import { Message } from 'ollama';
 import EponaBrain from './EponaBrain';
 
@@ -32,8 +32,8 @@ export default class EponaClient extends OllamaClient {
     return this._brain.memory.createSnapshot()
   }
 
-  public async loadMemory(){
-    // await this.brain.memory.loadSnapshot()
+  public async loadMemory(messages:BaseMemoryMessage[]){
+    await this._brain.memory.loadSnapshot(messages)
   }
   //endregion
 }

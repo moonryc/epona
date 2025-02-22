@@ -28,19 +28,23 @@ export type ChatMessage = {
   userId?: Maybe<Scalars['String']>;
 };
 
-export type ChatMessageFilterInput = {
+export type ChatMessageWhereInput = {
   conversationId?: InputMaybe<Scalars['String']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
   isSummary?: InputMaybe<Scalars['Boolean']>;
   role?: InputMaybe<MessageSource>;
-  skip?: InputMaybe<Scalars['Float']>;
-  take?: InputMaybe<Scalars['Float']>;
 };
 
 export type ChatMessageWithCount = {
   __typename?: 'ChatMessageWithCount';
   count: Scalars['Float'];
   items: Array<ChatMessage>;
+};
+
+export type ChatMessagesInput = {
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
+  where?: InputMaybe<ChatMessageWhereInput>;
 };
 
 export type Conversation = {
@@ -87,6 +91,10 @@ export type CreateConversationInput = {
   prompt: Scalars['String'];
 };
 
+export type LoadEponaMemoryInput = {
+  conversationId: Scalars['String'];
+};
+
 export enum MessageSource {
   Assistant = 'ASSISTANT',
   System = 'SYSTEM',
@@ -99,8 +107,8 @@ export type Mutation = {
   createConversation: Conversation;
   deleteChatMessages: SuccessResponse;
   deleteConversations: SuccessResponse;
-  loadMemory: SuccessResponse;
-  saveMemory: SuccessResponse;
+  loadEponaMemory: SuccessResponse;
+  saveEponaMemory: SuccessResponse;
   updateChatMessage: ChatMessage;
   updateConversation: Conversation;
 };
@@ -126,8 +134,13 @@ export type MutationDeleteConversationsArgs = {
 };
 
 
-export type MutationSaveMemoryArgs = {
-  input: SaveMemoryInput;
+export type MutationLoadEponaMemoryArgs = {
+  input: LoadEponaMemoryInput;
+};
+
+
+export type MutationSaveEponaMemoryArgs = {
+  input: SaveEponaMemoryInput;
 };
 
 
@@ -144,18 +157,24 @@ export type Query = {
   __typename?: 'Query';
   chatMessages: Array<ChatMessage>;
   chatMessagesWithCount: Array<ChatMessageWithCount>;
+  conversationById: Conversation;
   conversations: Array<Conversation>;
   conversationsWithCount: Array<ConversationWithCount>;
 };
 
 
 export type QueryChatMessagesArgs = {
-  input?: InputMaybe<ChatMessageFilterInput>;
+  input?: InputMaybe<ChatMessagesInput>;
 };
 
 
 export type QueryChatMessagesWithCountArgs = {
-  input?: InputMaybe<ChatMessageFilterInput>;
+  input?: InputMaybe<ChatMessagesInput>;
+};
+
+
+export type QueryConversationByIdArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -168,7 +187,7 @@ export type QueryConversationsWithCountArgs = {
   input?: InputMaybe<ConversationsInput>;
 };
 
-export type SaveMemoryInput = {
+export type SaveEponaMemoryInput = {
   conversationId: Scalars['String'];
 };
 
@@ -206,17 +225,26 @@ export type CreateConversationMutationVariables = Exact<{
 
 export type CreateConversationMutation = { __typename?: 'Mutation', createConversation: { __typename?: 'Conversation', createdAt: string, id: string, name: string, owner: ConversationOwner, prompt: string } };
 
-export type LoadMemoryMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LoadMemoryMutation = { __typename?: 'Mutation', loadMemory: { __typename?: 'SuccessResponse', message?: string | null, success: boolean } };
-
-export type SaveMemoryMutationVariables = Exact<{
-  input: SaveMemoryInput;
+export type LoadEponaMemoryMutationVariables = Exact<{
+  input: LoadEponaMemoryInput;
 }>;
 
 
-export type SaveMemoryMutation = { __typename?: 'Mutation', saveMemory: { __typename?: 'SuccessResponse', message?: string | null, success: boolean } };
+export type LoadEponaMemoryMutation = { __typename?: 'Mutation', loadEponaMemory: { __typename?: 'SuccessResponse', message?: string | null, success: boolean } };
+
+export type SaveEponaMemoryMutationVariables = Exact<{
+  input: SaveEponaMemoryInput;
+}>;
+
+
+export type SaveEponaMemoryMutation = { __typename?: 'Mutation', saveEponaMemory: { __typename?: 'SuccessResponse', message?: string | null, success: boolean } };
+
+export type ConversationByIdQueryVariables = Exact<{
+  conversationByIdId: Scalars['String'];
+}>;
+
+
+export type ConversationByIdQuery = { __typename?: 'Query', conversationById: { __typename?: 'Conversation', createdAt: string, id: string, name: string, owner: ConversationOwner, prompt: string } };
 
 export type ConversationsQueryVariables = Exact<{
   input: ConversationsInput;
@@ -252,21 +280,22 @@ export type ConversationWithCountFieldPolicy = {
 	conversation?: FieldPolicy<any> | FieldReadFunction<any>,
 	count?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('createChatMessage' | 'createConversation' | 'deleteChatMessages' | 'deleteConversations' | 'loadMemory' | 'saveMemory' | 'updateChatMessage' | 'updateConversation' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('createChatMessage' | 'createConversation' | 'deleteChatMessages' | 'deleteConversations' | 'loadEponaMemory' | 'saveEponaMemory' | 'updateChatMessage' | 'updateConversation' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	createChatMessage?: FieldPolicy<any> | FieldReadFunction<any>,
 	createConversation?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteChatMessages?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteConversations?: FieldPolicy<any> | FieldReadFunction<any>,
-	loadMemory?: FieldPolicy<any> | FieldReadFunction<any>,
-	saveMemory?: FieldPolicy<any> | FieldReadFunction<any>,
+	loadEponaMemory?: FieldPolicy<any> | FieldReadFunction<any>,
+	saveEponaMemory?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateChatMessage?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateConversation?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('chatMessages' | 'chatMessagesWithCount' | 'conversations' | 'conversationsWithCount' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('chatMessages' | 'chatMessagesWithCount' | 'conversationById' | 'conversations' | 'conversationsWithCount' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	chatMessages?: FieldPolicy<any> | FieldReadFunction<any>,
 	chatMessagesWithCount?: FieldPolicy<any> | FieldReadFunction<any>,
+	conversationById?: FieldPolicy<any> | FieldReadFunction<any>,
 	conversations?: FieldPolicy<any> | FieldReadFunction<any>,
 	conversationsWithCount?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -364,71 +393,110 @@ export function useCreateConversationMutation(baseOptions?: Apollo.MutationHookO
 export type CreateConversationMutationHookResult = ReturnType<typeof useCreateConversationMutation>;
 export type CreateConversationMutationResult = Apollo.MutationResult<CreateConversationMutation>;
 export type CreateConversationMutationOptions = Apollo.BaseMutationOptions<CreateConversationMutation, CreateConversationMutationVariables>;
-export const LoadMemoryDocument = /*#__PURE__*/ gql`
-    mutation LoadMemory {
-  loadMemory {
+export const LoadEponaMemoryDocument = /*#__PURE__*/ gql`
+    mutation LoadEponaMemory($input: LoadEponaMemoryInput!) {
+  loadEponaMemory(input: $input) {
     ...SuccessResponse
   }
 }
     ${SuccessResponseFragmentDoc}`;
-export type LoadMemoryMutationFn = Apollo.MutationFunction<LoadMemoryMutation, LoadMemoryMutationVariables>;
+export type LoadEponaMemoryMutationFn = Apollo.MutationFunction<LoadEponaMemoryMutation, LoadEponaMemoryMutationVariables>;
 
 /**
- * __useLoadMemoryMutation__
+ * __useLoadEponaMemoryMutation__
  *
- * To run a mutation, you first call `useLoadMemoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoadMemoryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLoadEponaMemoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoadEponaMemoryMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [loadMemoryMutation, { data, loading, error }] = useLoadMemoryMutation({
- *   variables: {
- *   },
- * });
- */
-export function useLoadMemoryMutation(baseOptions?: Apollo.MutationHookOptions<LoadMemoryMutation, LoadMemoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoadMemoryMutation, LoadMemoryMutationVariables>(LoadMemoryDocument, options);
-      }
-export type LoadMemoryMutationHookResult = ReturnType<typeof useLoadMemoryMutation>;
-export type LoadMemoryMutationResult = Apollo.MutationResult<LoadMemoryMutation>;
-export type LoadMemoryMutationOptions = Apollo.BaseMutationOptions<LoadMemoryMutation, LoadMemoryMutationVariables>;
-export const SaveMemoryDocument = /*#__PURE__*/ gql`
-    mutation SaveMemory($input: SaveMemoryInput!) {
-  saveMemory(input: $input) {
-    ...SuccessResponse
-  }
-}
-    ${SuccessResponseFragmentDoc}`;
-export type SaveMemoryMutationFn = Apollo.MutationFunction<SaveMemoryMutation, SaveMemoryMutationVariables>;
-
-/**
- * __useSaveMemoryMutation__
- *
- * To run a mutation, you first call `useSaveMemoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSaveMemoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [saveMemoryMutation, { data, loading, error }] = useSaveMemoryMutation({
+ * const [loadEponaMemoryMutation, { data, loading, error }] = useLoadEponaMemoryMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useSaveMemoryMutation(baseOptions?: Apollo.MutationHookOptions<SaveMemoryMutation, SaveMemoryMutationVariables>) {
+export function useLoadEponaMemoryMutation(baseOptions?: Apollo.MutationHookOptions<LoadEponaMemoryMutation, LoadEponaMemoryMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SaveMemoryMutation, SaveMemoryMutationVariables>(SaveMemoryDocument, options);
+        return Apollo.useMutation<LoadEponaMemoryMutation, LoadEponaMemoryMutationVariables>(LoadEponaMemoryDocument, options);
       }
-export type SaveMemoryMutationHookResult = ReturnType<typeof useSaveMemoryMutation>;
-export type SaveMemoryMutationResult = Apollo.MutationResult<SaveMemoryMutation>;
-export type SaveMemoryMutationOptions = Apollo.BaseMutationOptions<SaveMemoryMutation, SaveMemoryMutationVariables>;
+export type LoadEponaMemoryMutationHookResult = ReturnType<typeof useLoadEponaMemoryMutation>;
+export type LoadEponaMemoryMutationResult = Apollo.MutationResult<LoadEponaMemoryMutation>;
+export type LoadEponaMemoryMutationOptions = Apollo.BaseMutationOptions<LoadEponaMemoryMutation, LoadEponaMemoryMutationVariables>;
+export const SaveEponaMemoryDocument = /*#__PURE__*/ gql`
+    mutation SaveEponaMemory($input: SaveEponaMemoryInput!) {
+  saveEponaMemory(input: $input) {
+    ...SuccessResponse
+  }
+}
+    ${SuccessResponseFragmentDoc}`;
+export type SaveEponaMemoryMutationFn = Apollo.MutationFunction<SaveEponaMemoryMutation, SaveEponaMemoryMutationVariables>;
+
+/**
+ * __useSaveEponaMemoryMutation__
+ *
+ * To run a mutation, you first call `useSaveEponaMemoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveEponaMemoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveEponaMemoryMutation, { data, loading, error }] = useSaveEponaMemoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSaveEponaMemoryMutation(baseOptions?: Apollo.MutationHookOptions<SaveEponaMemoryMutation, SaveEponaMemoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveEponaMemoryMutation, SaveEponaMemoryMutationVariables>(SaveEponaMemoryDocument, options);
+      }
+export type SaveEponaMemoryMutationHookResult = ReturnType<typeof useSaveEponaMemoryMutation>;
+export type SaveEponaMemoryMutationResult = Apollo.MutationResult<SaveEponaMemoryMutation>;
+export type SaveEponaMemoryMutationOptions = Apollo.BaseMutationOptions<SaveEponaMemoryMutation, SaveEponaMemoryMutationVariables>;
+export const ConversationByIdDocument = /*#__PURE__*/ gql`
+    query ConversationById($conversationByIdId: String!) {
+  conversationById(id: $conversationByIdId) {
+    ...Conversation
+  }
+}
+    ${ConversationFragmentDoc}`;
+
+/**
+ * __useConversationByIdQuery__
+ *
+ * To run a query within a React component, call `useConversationByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConversationByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useConversationByIdQuery({
+ *   variables: {
+ *      conversationByIdId: // value for 'conversationByIdId'
+ *   },
+ * });
+ */
+export function useConversationByIdQuery(baseOptions: Apollo.QueryHookOptions<ConversationByIdQuery, ConversationByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ConversationByIdQuery, ConversationByIdQueryVariables>(ConversationByIdDocument, options);
+      }
+export function useConversationByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConversationByIdQuery, ConversationByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ConversationByIdQuery, ConversationByIdQueryVariables>(ConversationByIdDocument, options);
+        }
+export type ConversationByIdQueryHookResult = ReturnType<typeof useConversationByIdQuery>;
+export type ConversationByIdLazyQueryHookResult = ReturnType<typeof useConversationByIdLazyQuery>;
+export type ConversationByIdQueryResult = Apollo.QueryResult<ConversationByIdQuery, ConversationByIdQueryVariables>;
+export function refetchConversationByIdQuery(variables: ConversationByIdQueryVariables) {
+      return { query: ConversationByIdDocument, variables: variables }
+    }
 export const ConversationsDocument = /*#__PURE__*/ gql`
     query Conversations($input: ConversationsInput!) {
   conversations(input: $input) {
@@ -469,12 +537,13 @@ export function refetchConversationsQuery(variables: ConversationsQueryVariables
     }
 export const namedOperations = {
   Query: {
+    ConversationById: 'ConversationById',
     Conversations: 'Conversations'
   },
   Mutation: {
     CreateConversation: 'CreateConversation',
-    LoadMemory: 'LoadMemory',
-    SaveMemory: 'SaveMemory'
+    LoadEponaMemory: 'LoadEponaMemory',
+    SaveEponaMemory: 'SaveEponaMemory'
   },
   Fragment: {
     ChatMessage: 'ChatMessage',

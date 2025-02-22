@@ -7,7 +7,7 @@ export enum MessageSource {
   ASSISTANT = 'Assistant',
 }
 
-@Entity('epona_chats')
+@Entity()
 export default class ChatMessage implements BaseMemoryMessage {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

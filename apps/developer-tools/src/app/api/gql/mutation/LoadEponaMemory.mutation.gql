@@ -1,0 +1,5 @@
+mutation LoadEponaMemory($input: LoadEponaMemoryInput!) {
+  loadEponaMemory(input: $input) {
+    ...SuccessResponse
+  }
+}

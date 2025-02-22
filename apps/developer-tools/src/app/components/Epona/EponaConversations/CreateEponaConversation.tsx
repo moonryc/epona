@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Sta
 import { useAllToasts } from "../../../hooks/useAllToasts";
 import { useState } from "react";
 import { ConversationOwner, namedOperations, useCreateConversationMutation } from "../../../api/generated/graphql";
+import { Add } from "@mui/icons-material";
 
 type CreateEponaConversationProps = {
     open: boolean;
@@ -70,10 +71,11 @@ const CreateEponaConversation = ({ open, onClose }: CreateEponaConversationProps
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" onClick={onClose}>Cancel</Button>
+                <Button variant="outlined" onClick={onClose}>Cancel</Button>
                 <Button 
                     variant="contained" 
                     onClick={handleCreateConversation}
+                    startIcon={<Add />}
                 >
                     Create
                 </Button>

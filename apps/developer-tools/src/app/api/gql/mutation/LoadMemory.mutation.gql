@@ -1,5 +1,0 @@
-mutation LoadMemory {
-  loadMemory {
-    ...SuccessResponse
-  }
-}
