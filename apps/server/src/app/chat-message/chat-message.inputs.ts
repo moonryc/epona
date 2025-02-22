@@ -43,7 +43,7 @@ export class UpdateChatMessageInput {
 }
 
 @InputType()
-export class ChatMessageFilterInput {
+export class ChatMessageWhereInput {
     @Field(() => [String], { nullable: true })
     ids?: string[];
 
@@ -55,10 +55,17 @@ export class ChatMessageFilterInput {
 
     @Field(() => MessageSource, { nullable: true })
     role?: MessageSource;
+}
+
+@InputType()
+export class ChatMessagesInput {
+    @Field(() => ChatMessageWhereInput, { nullable: true })
+    where?: ChatMessageWhereInput;
 
     @Field({ nullable: true })
     skip?: number;
 
     @Field({ nullable: true })
     take?: number;
+
 }

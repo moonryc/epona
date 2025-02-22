@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common/decorators';
-import { EponaSingleton } from './epona.singleton';
+import { ChatMessageModuleDB } from '@epona/epona-db';
 import { Provider } from '@nestjs/common';
+import { Module } from '@nestjs/common/decorators';
 import { EponaController } from './epona.controller';
-import { EponaService } from './epona.service';
-import { ChatMessageModule } from '../chat-message/chat-message.module';
 import { EponaResolver } from './epona.resolver';
+import { EponaService } from './epona.service';
+import { EponaSingleton } from './epona.singleton';
 
 const EPONA_PROVIDER: Provider = {
   provide: 'EPONA_SINGLETON',
@@ -12,9 +12,9 @@ const EPONA_PROVIDER: Provider = {
 }
 
 @Module({
-  imports: [ChatMessageModule],
+  imports: [ChatMessageModuleDB],
   providers: [EPONA_PROVIDER, EponaService, EponaResolver],
   controllers: [EponaController],
   exports: ['EPONA_SINGLETON', EponaService],
 })
-export class EponaModule {}
+export class EponaModule { }

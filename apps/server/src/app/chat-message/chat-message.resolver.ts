@@ -1,6 +1,6 @@
 import { ChatMessage } from './chat-message.model';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ChatMessageFilterInput, CreateChatMessageInput, UpdateChatMessageInput } from './chat-message.inputs';
+import { ChatMessagesInput, CreateChatMessageInput, UpdateChatMessageInput } from './chat-message.inputs';
 import ChatMessageService from './chat-message.service';
 import { ChatMessageWithCount } from './chat-message.model';
 import { SuccessResponse } from '../Responses';
@@ -13,14 +13,14 @@ export class ChatMessageResolver {
 
     @Query(() => [ChatMessage])
     async chatMessages(
-        @Args('input', { nullable: true }) options?: ChatMessageFilterInput,
+        @Args('input', { nullable: true }) options?: ChatMessagesInput,
     ) {
         return this.chatMessageService.find(options || {});
     }
 
     @Query(() => [ChatMessageWithCount])
     async chatMessagesWithCount(
-        @Args('input', { nullable: true }) options?: ChatMessageFilterInput,
+        @Args('input', { nullable: true }) options?: ChatMessagesInput,
     ) {
         return this.chatMessageService.findAndCount(options || {});
     }

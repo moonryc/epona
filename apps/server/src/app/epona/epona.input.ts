@@ -7,7 +7,13 @@ export class ChatDto {
 }
 
 @InputType()
-export class SaveMemoryInput {
+export class SaveEponaMemoryInput {
+  @Field(() => String)
+  conversationId: string;
+}
+
+@InputType()
+export class LoadEponaMemoryInput {
   @Field(() => String)
   conversationId: string;
 }

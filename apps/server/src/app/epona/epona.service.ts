@@ -1,10 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ChatDto, SaveMemoryInput } from './epona.input';
-import { EponaSingleton } from './epona.singleton';
-import { SuccessResponse } from '../Responses';
 import { EponaClient } from '@epona/epona-client';
-import {Response} from 'express';
-import ChatMessageService from '../chat-message/chat-message.service';
+import { ChatMessageServiceDB, ConversationOwner } from '@epona/epona-db';
+import { Inject, Injectable } from '@nestjs/common';
+import { Response } from 'express';
+import { SuccessResponse } from '../Responses';
+import { ChatDto, LoadEponaMemoryInput, SaveEponaMemoryInput,  } from './epona.input';
+import { EponaSingleton } from './epona.singleton';
+import sortChatMessages from '../util/sortMessages.util';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Conversation } from '@epona/epona-db';
 
 @Injectable()
 export class EponaService {
@@ -12,7 +16,7 @@ export class EponaService {
 
   constructor(
     @Inject('EPONA_SINGLETON') private readonly eponaSingleton: EponaSingleton,
-    private readonly chatMessageService: ChatMessageService
+    private readonly chatMessageServiceDB: ChatMessageServiceDB,
   ) {
     this.epona = eponaSingleton.getInstance();
   }
@@ -36,7 +40,7 @@ export class EponaService {
     return res.end();
   }
 
-  async saveMemory(input: SaveMemoryInput) {
+  async saveEponaMemory(input: SaveEponaMemoryInput) {
     try{
       const chatHistoryExport =  this.epona.saveMemory()
       const chatHistoryWithConversationId = chatHistoryExport.map(message => ({
@@ -44,7 +48,7 @@ export class EponaService {
         conversationId: input.conversationId,
         images: message.images?.map(img => img instanceof Uint8Array ? Buffer.from(img).toString('base64') : img)
       }))
-      await this.chatMessageService.upsertMany(chatHistoryWithConversationId)
+      await this.chatMessageServiceDB.upsertMany(chatHistoryWithConversationId)
       return new SuccessResponse({ success: true, message: 'Saved memory' });
     }catch(e){
       console.error(e);
@@ -52,9 +56,19 @@ export class EponaService {
     }
   }
 
-  async loadMemory() {
+  async loadEponaMemory(input: LoadEponaMemoryInput) {
     try{
-      await this.epona.loadMemory()
+      const messagesPerConversationWithSummaries = await this.chatMessageServiceDB.find({ 
+        where: [
+          {conversationId: input.conversationId},
+          {isSummary: true, conversation:{owner: ConversationOwner.EPONA}}
+        ]
+      })
+      if(messagesPerConversationWithSummaries.length === 0){
+        return new SuccessResponse({ success: false, message: 'No messages found' });
+      }
+      const organizedMessages = sortChatMessages(messagesPerConversationWithSummaries)
+      await this.epona.loadMemory(organizedMessages)
       return new SuccessResponse({ success: true, message: 'Successfully loaded memory' });
     }catch(e){
       console.error(e);

@@ -1,7 +1,7 @@
 import { ChatMessage, ChatMessageServiceDB } from "@epona/epona-db";
 import { Injectable } from "@nestjs/common";
 import type { EntityManager } from 'typeorm';
-import { ChatMessageFilterInput, CreateChatMessageInput, UpdateChatMessageInput } from './chat-message.inputs';
+import { ChatMessagesInput, CreateChatMessageInput, UpdateChatMessageInput } from './chat-message.inputs';
 
 @Injectable()
 export default class ChatMessageService {
@@ -21,11 +21,11 @@ export default class ChatMessageService {
         return this.chatMessageServiceDB.upsertMany(input);
     }
     
-    async find(input: ChatMessageFilterInput) {
+    async find(input: ChatMessagesInput) {
         return this.chatMessageServiceDB.find(input);
     }
 
-    async findAndCount(input: ChatMessageFilterInput) {
+    async findAndCount(input: ChatMessagesInput) {
         return this.chatMessageServiceDB.findAndCount(input);
     }
 

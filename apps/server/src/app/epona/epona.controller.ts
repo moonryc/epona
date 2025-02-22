@@ -9,6 +9,11 @@ export class EponaController {
 
   @Post("/streamChat")
   steamChat(@Body() body: ChatDto, @Res()res: Response){
-    return this.eponaService.chat(body,res)
+    try{
+      return this.eponaService.chat(body,res)
+    }catch(error){
+      //@ts-ignore
+      return new SuccessResponse({success: false, message: error!.message as unknown as string})
+    }
   }
 }
