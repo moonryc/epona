@@ -1,5 +1,5 @@
 import { EponaClient } from '@epona/epona-client';
-import { ChatMessageServiceDB, ConversationOwner } from '@epona/epona-db';
+import { ChatMessageServiceDB, ConversationOwner, ConversationServiceDB } from '@epona/epona-db';
 import { Inject, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { SuccessResponse } from '../Responses';
@@ -17,6 +17,7 @@ export class EponaService {
   constructor(
     @Inject('EPONA_SINGLETON') private readonly eponaSingleton: EponaSingleton,
     private readonly chatMessageServiceDB: ChatMessageServiceDB,
+    private readonly conversationServiceDB: ConversationServiceDB,
   ) {
     this.epona = eponaSingleton.getInstance();
   }
@@ -48,6 +49,7 @@ export class EponaService {
         conversationId: input.conversationId,
         images: message.images?.map(img => img instanceof Uint8Array ? Buffer.from(img).toString('base64') : img)
       }))
+      console.log('chatHistoryWithConversationId', chatHistoryWithConversationId[0]);
       await this.chatMessageServiceDB.upsertMany(chatHistoryWithConversationId)
       return new SuccessResponse({ success: true, message: 'Saved memory' });
     }catch(e){
@@ -67,8 +69,12 @@ export class EponaService {
       if(messagesPerConversationWithSummaries.length === 0){
         return new SuccessResponse({ success: false, message: 'No messages found' });
       }
+      const conversation = await this.conversationServiceDB.findById(input.conversationId)
+      if(!conversation){
+        return new SuccessResponse({ success: false, message: 'Conversation not found' });
+      }
       const organizedMessages = sortChatMessages(messagesPerConversationWithSummaries)
-      await this.epona.loadMemory(organizedMessages)
+      await this.epona.loadMemory({messages: organizedMessages, conversationPrompt: conversation.prompt})
       return new SuccessResponse({ success: true, message: 'Successfully loaded memory' });
     }catch(e){
       console.error(e);

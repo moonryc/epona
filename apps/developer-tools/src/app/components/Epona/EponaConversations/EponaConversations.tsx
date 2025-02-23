@@ -20,9 +20,6 @@ const EponaConversations = () => {
                 <Box display="flex" width="100%" flexDirection="column" gap={2}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
                     <Box display="flex" justifyContent="flex-end" alignItems="center" p={2}>
-                        <Typography variant="h6">LIVES: </Typography>
-                    </Box>
-                    <Box display="flex" justifyContent="flex-end" alignItems="center" p={2}>
                         <Button variant="contained" onClick={toggleOpen} startIcon={<Add />}>CONVERSATION</Button>
                     </Box>
                     </Box>

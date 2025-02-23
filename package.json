@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "devtools": "nx serve developer-tools",
-    "backend": "nx serve server",
+    "backend": "nx serve server --watch",
     "nx:reset": "npx nx reset",
     "db:migrate": "npx ts-node -P ./libs/epona-db/tsconfig.lib.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./libs/epona-db/src/lib/datasource.ts",
     "db:generate-migration": "ts-node ./libs/epona-db/src/scripts/typeormMigrationGenerator.ts",

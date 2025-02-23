@@ -22,11 +22,11 @@ const ChatMessage = ({chat}:ChatMessageProps) => {
   const eponaIcon =  !isUser && "🌕"
   const chatBorderRadius = `25px 25px ${isUser ? "0px 25px" : "25px 0px"}`
   const bubbleColor = isUser ? "primary.main" : "secondary.main"
-  const color = isUser ? "secondary.main" : "black"
+  // const color = isUser ? "secondary.main" : "black"
   return (
     <Box display={"flex"} justifyContent={isUser ? "right" : "left"} gap={1} m={1} alignItems={"end"}>
       {eponaIcon}
-      <Typography color={color} bgcolor={bubbleColor} fontWeight={"bolder"} py={1} px={3} mb={2} borderRadius={chatBorderRadius}>{chat.message}</Typography>
+      <Typography color={"black"} bgcolor={bubbleColor} fontWeight={"bolder"} py={1} px={3} mb={2} borderRadius={chatBorderRadius}>{chat.message}</Typography>
       {userIcon}
     </Box>
   )

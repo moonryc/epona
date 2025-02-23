@@ -10,19 +10,20 @@ import { isNil } from 'lodash';
 
 const EponaDashboard = () => {
   const theme = useTheme();
-  const { dummyToast, successToast, errorToast } = useAllToasts();
+  const { successToast, errorToast } = useAllToasts();
   const {conversationId} = useEponaConversationId();
   const isConversationSelected = !isNil(conversationId);
 
   const [saveEponaMemoryMutation, {loading: saveEponaMemoryLoading}] = useSaveEponaMemoryMutation({
     variables: {
       input: {
-        conversationId: '1',
+        conversationId: conversationId || '1',
       }
     },
     onCompleted: (data) => {
       if(!data.saveEponaMemory.success){
         errorToast(data.saveEponaMemory.message);
+        return;
       }
       successToast('Memory saved');
     },
@@ -34,13 +35,14 @@ const EponaDashboard = () => {
   const [loadEponaMemoryMutation, {loading: loadEponaMemoryLoading}] = useLoadEponaMemoryMutation({
     variables: {
       input: {
-        conversationId: '1',
+        conversationId: conversationId || '1',
       }
     },
     onCompleted: (data) => {
       if(!data.loadEponaMemory.success){
         errorToast(data.loadEponaMemory.message);
       }
+      successToast('Memory loaded');
     },
     onError: () => {
       errorToast('Error loading memory');
@@ -49,32 +51,28 @@ const EponaDashboard = () => {
   
   const [isChatOpen, toggleChat] = useToggle(false);
 
-  const iconButton = {
-    bgcolor: theme.palette.primary.main,
-    '&:hover': { backgroundColor: theme.palette.primary.dark },
-  };
-
   const buttons = useMemo(() => {
     const buttonSx = {
       fill: theme.palette.secondary.main,
     };
 
     return [
-      { icon: <Chat sx={buttonSx} />, name: 'CHAT', action: toggleChat },
-      { icon: <Save sx={buttonSx} disabled={saveEponaMemoryLoading || !isConversationSelected} />, name: 'SAVE MEMORY', action: saveEponaMemoryMutation, },
+      { icon: <Chat sx={buttonSx} />, name: 'CHAT', action: toggleChat, disabled: false },
+      { icon: <Save sx={buttonSx} />, name: 'SAVE MEMORY', action: saveEponaMemoryMutation, disabled: saveEponaMemoryLoading || !isConversationSelected },
       {
-        icon: <FileOpen sx={buttonSx} disabled={loadEponaMemoryLoading || !isConversationSelected} />,
+        icon: <FileOpen sx={buttonSx} />,
         name: 'LOAD MEMORY',
-        action: dummyToast,
+        action: loadEponaMemoryMutation,
+        disabled: loadEponaMemoryLoading || !isConversationSelected
       },
     ] as const;
-  }, [dummyToast, isConversationSelected, loadEponaMemoryLoading, saveEponaMemoryLoading, saveEponaMemoryMutation, theme.palette.secondary.main, toggleChat]);
+  }, [isConversationSelected, loadEponaMemoryLoading, loadEponaMemoryMutation, saveEponaMemoryLoading, saveEponaMemoryMutation, theme.palette.secondary.main, toggleChat]);
 
   return (
     <Grid2 container spacing={2} m={2}>
       {buttons.map((button) => (
         <Grid2
-          size={{ sm: 6, md: 4 }}
+          size={{ xs:6, sm: 6, md: 4 }}
           display={'flex'}
           flexDirection={'column'}
           alignItems={'center'}
@@ -84,6 +82,7 @@ const EponaDashboard = () => {
           <IconButton
             color={'secondary'}
             onClick={button.action}
+            disabled={button.disabled}
           >
             {button.icon}
           </IconButton>

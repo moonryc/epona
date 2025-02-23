@@ -17,7 +17,7 @@ const Conversation = ({conversation}:ConversationProps) => {
     return (
         <Paper sx={{bgcolor: "primary.main", p: 2, borderRadius: 2}}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography>{conversation.name}</Typography>
+            <Typography color={"black"}>{conversation.name}</Typography>
             {!isSelected && <Button variant="contained" color="secondary" onClick={handleClick}>
                 {buttonText}
             </Button>}
