@@ -1,6 +1,7 @@
 import { Box, Grid2, Typography } from '@mui/material';
 import Epona from './Layout/Epona';
 import { ApolloProvider } from './providers/ApolloProvider';
+import BroadcastMonitor from './components/Epona/BroadcastMonitor';
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
             <Grid2 size={{ xs: 12, sm: 12, md: 2 }} />
             <Grid2 container size={{ xs: 12, sm: 12, md: 8 }}>
               <Epona />
+              <BroadcastMonitor />
             </Grid2>
             <Grid2 size={{ xs: 12, sm: 12, md: 2 }} />
           </Grid2>

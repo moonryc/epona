@@ -4,6 +4,7 @@ import EponaConversations from '../components/Epona/EponaConversations/EponaConv
 import EponaDashoard from '../components/Epona/EponaDashboard/EponaDashboard';
 import EponaModules from '../components/Epona/EponaModules';
 import EponaStatus from '../components/Epona/ServerStatus';
+import EponaChatExample from '../components/EponaChatExample';
 
 const Epona = () => {
   return (
@@ -22,6 +23,7 @@ const Epona = () => {
         <Grid2 size={{ xs: 12 }}>
           <EponaConversations />
           <EponaModules />
+          <EponaChatExample/>
         </Grid2>
       </Grid2>
     </Accordion>

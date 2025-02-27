@@ -2,8 +2,8 @@ import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnectio
 import { Server, Socket } from 'socket.io';
 import { OnModuleInit } from '@nestjs/common';
 
-@WebSocketGateway({ cors: { origin: '*' } }) // Enable CORS if needed
-export class AppGateway implements OnModuleInit {
+@WebSocketGateway({ cors: { origin: '*' } })
+export class AppGateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server | undefined;
 

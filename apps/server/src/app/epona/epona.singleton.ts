@@ -1,7 +1,7 @@
 import { EponaClient } from '@epona/epona-client';
 
 export class EponaSingleton {
-  private static instance:EponaClient;
+  private static instance: EponaClient;
   private readonly createdAt: Date;
 
   constructor() {
